@@ -1,0 +1,68 @@
+openapi: 3.0.3
+info:
+  title: OpenAPI definition
+  version: v0.1
+
+paths:
+
+  ######################### Item API #########################
+
+  /v0.1/items/{itemId}:
+    get:
+      tags:
+        - item-controller
+      description: "Returns Item by Id"
+      operationId: getItemById
+      parameters:
+        - name: "itemId"
+          in: path
+          required: true
+          description: "Item ID in base58"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Item"
+        '404':
+          $ref: "#/components/responses/EntityNotFound"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+components:
+  schemas:
+    #################### Item - Solana ####################
+    Item:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
+
+  #======================== Responses ============================#
+
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/UnionApiErrorBadRequest"
+    ServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/UnionApiErrorServerError"
+    EntityNotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/UnionApiErrorEntityNotFound"

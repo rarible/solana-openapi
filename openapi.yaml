@@ -5,19 +5,19 @@ info:
 
 paths:
 
-  ######################### Item API #########################
+  ######################### Token API #########################
 
-  /v0.1/items/{itemId}:
+  /v0.1/tokens/{tokenAddress}:
     get:
       tags:
-        - item-controller
-      description: "Returns Item by Id"
-      operationId: getItemById
+        - token-controller
+      description: "Returns Token by address"
+      operationId: getTokenByAddress
       parameters:
-        - name: "itemId"
+        - name: "tokenAddress"
           in: path
           required: true
-          description: "Item ID in base58"
+          description: "Token address in base58"
           schema:
             type: string
       responses:
@@ -26,7 +26,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Item"
+                $ref: "#/components/schemas/Token"
         '404':
           $ref: "#/components/responses/EntityNotFound"
         '400':
@@ -36,14 +36,77 @@ paths:
 
 components:
   schemas:
-    #################### Item - Solana ####################
-    Item:
+    #################### Token - Solana ####################
+    Token:
       type: object
       properties:
-        id:
+        address:
+          type: string
+        supply:
+          $ref: "#/components/schemas/BigInteger"
+        collection:
           type: string
       required:
-        - id
+        - address
+        - supply
+
+    #################### Solana - Errors ####################
+
+    SolanaApiErrorEntityNotFound:
+      required:
+        - code
+        - message
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+            - NOT_FOUND
+          default: NOT_FOUND
+        message:
+          type: string
+          description: "Error message"
+
+    SolanaApiErrorBadRequest:
+      required:
+        - code
+        - message
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+            - BAD_REQUEST
+            - VALIDATION
+          default: BAD_REQUEST
+        message:
+          type: string
+          description: "Error message"
+
+    SolanaApiErrorServerError:
+      required:
+        - code
+        - message
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+            - UNKNOWN
+          default: UNKNOWN
+        message:
+          type: string
+          description: "Error message"
+
+    #################### Referenced Types ####################
+
+    BigInteger:
+      type: string
+      example: 123456
+    BigDecimal:
+      type: string
+      example: 123456.789
+
 
   #======================== Responses ============================#
 
@@ -53,16 +116,16 @@ components:
       content:
         application/json:
           schema:
-            "$ref": "#/components/schemas/UnionApiErrorBadRequest"
+            "$ref": "#/components/schemas/SolanaApiErrorBadRequest"
     ServerError:
       description: Internal Server Error
       content:
         application/json:
           schema:
-            "$ref": "#/components/schemas/UnionApiErrorServerError"
+            "$ref": "#/components/schemas/SolanaApiErrorServerError"
     EntityNotFound:
       description: Not Found
       content:
         application/json:
           schema:
-            "$ref": "#/components/schemas/UnionApiErrorEntityNotFound"
+            "$ref": "#/components/schemas/SolanaApiErrorEntityNotFound"

@@ -9,8 +9,8 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.rarible.protocol.solana</groupId>
-    <artifactId>solana-protocol-openapi-parent</artifactId>
+    <groupId>com.rarible.solana.protocol</groupId>
+    <artifactId>solana-protocol-openapi</artifactId>
     <packaging>pom</packaging>
     <version>${revision}</version>
 
@@ -34,16 +34,16 @@
     </distributionManagement>
 
     <properties>
-        <revision>0.0.1</revision>
+        <revision>0.0.2</revision>
 
         <openapi.plugin.version>5.1.0</openapi.plugin.version>
         <rarible.codegen.server.version>1.2.0</rarible.codegen.server.version>
         <rarible.codegen.client.version>1.3.0</rarible.codegen.client.version>
         <rarible.codegen.model.version>1.4.1</rarible.codegen.model.version>
 
-        <codegen.package>com.rarible.protocol.solana.dto</codegen.package>
+        <codegen.package>com.rarible.solana.protocol.dto</codegen.package>
 
-        <rarible.core.version>2.0.17</rarible.core.version>
+        <rarible.core.version>2.2.2</rarible.core.version>
     </properties>
 
     <dependencyManagement>
@@ -63,13 +63,18 @@
 
             <!-- =========== Solana Protocol-API =========== -->
             <dependency>
-                <groupId>com.rarible.protocol.solana</groupId>
-                <artifactId>solana-protocol-model</artifactId>
+                <groupId>com.rarible.solana.protocol</groupId>
+                <artifactId>solana-protocol-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.rarible.protocol.solana</groupId>
-                <artifactId>solana-protocol-api</artifactId>
+                <groupId>com.rarible.solana.protocol</groupId>
+                <artifactId>solana-protocol-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.rarible.solana.protocol</groupId>
+                <artifactId>solana-protocol-model</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
@@ -130,6 +135,8 @@
 
     <modules>
         <module>solana-protocol-api</module>
+        <module>solana-protocol-client</module>
+        <module>solana-protocol-client-starter</module>
         <module>solana-protocol-model</module>
     </modules>
 </project>

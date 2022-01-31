@@ -1,0 +1,39 @@
+package com.rarible.solana.protocol.api.client.autoconfigure
+
+import com.rarible.core.application.ApplicationEnvironmentInfo
+import com.rarible.solana.protocol.api.client.CompositeWebClientCustomizer
+import com.rarible.solana.protocol.api.client.DefaultSolanaWebClientCustomizer
+import com.rarible.solana.protocol.api.client.NoopWebClientCustomizer
+import com.rarible.solana.protocol.api.client.SolanaApiServiceUriProvider
+import com.rarible.solana.protocol.api.client.SolanaNftIndexerApiClientFactory
+import com.rarible.solana.protocol.api.client.SwarmSolanaApiServiceUriProvider
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
+import org.springframework.boot.web.reactive.function.client.WebClientCustomizer
+import org.springframework.context.annotation.Bean
+
+const val SOLANA_WEB_CLIENT_CUSTOMIZER = "SOLANA_WEB_CLIENT_CUSTOMIZER"
+
+class SolanaApiClientAutoConfiguration(
+    private val applicationEnvironmentInfo: ApplicationEnvironmentInfo
+) {
+
+    @Autowired(required = false)
+    @Qualifier(SOLANA_WEB_CLIENT_CUSTOMIZER)
+    private var webClientCustomizer: WebClientCustomizer = NoopWebClientCustomizer()
+
+    @Bean
+    @ConditionalOnMissingBean(SolanaApiServiceUriProvider::class)
+    fun unionApiServiceUriProvider(): SolanaApiServiceUriProvider =
+        SwarmSolanaApiServiceUriProvider(applicationEnvironmentInfo.name)
+
+    @Bean
+    @ConditionalOnMissingBean(SolanaNftIndexerApiClientFactory::class)
+    fun unionApiClientFactory(solanaApiServiceUriProvider: SolanaApiServiceUriProvider): SolanaNftIndexerApiClientFactory {
+        val customizer = CompositeWebClientCustomizer(
+            listOf(DefaultSolanaWebClientCustomizer(), webClientCustomizer)
+        )
+        return SolanaNftIndexerApiClientFactory(solanaApiServiceUriProvider, customizer)
+    }
+}

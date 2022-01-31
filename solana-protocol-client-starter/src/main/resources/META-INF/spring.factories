@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.rarible.solana.protocol.api.client.autoconfigure.SolanaApiClientAutoConfiguration

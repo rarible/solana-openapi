@@ -2,14 +2,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>com.rarible.solana.protocol</groupId>
         <artifactId>solana-protocol-openapi</artifactId>
         <version>${revision}</version>
     </parent>
 
-    <artifactId>solana-protocol-api</artifactId>
+    <artifactId>solana-protocol-client</artifactId>
     <packaging>jar</packaging>
 
     <properties>
@@ -21,19 +23,32 @@
         <!-- ============ Solana Protocol-API ============= -->
         <dependency>
             <groupId>com.rarible.solana.protocol</groupId>
+            <artifactId>solana-protocol-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.rarible.solana.protocol</groupId>
             <artifactId>solana-protocol-model</artifactId>
         </dependency>
 
         <!-- =============== Rarible-core ================ -->
         <dependency>
             <groupId>com.rarible.core</groupId>
-            <artifactId>rarible-core-logging</artifactId>
+            <artifactId>rarible-core-client</artifactId>
         </dependency>
 
-        <!-- ================== Spring ==================== -->
+        <!-- ================== Other ==================== -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-kotlin</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
         </dependency>
     </dependencies>
 
@@ -44,11 +59,12 @@
                 <artifactId>model-generator-maven-plugin</artifactId>
                 <configuration>
                     <schema>
-                        <outputFile>${dir.target.classes}/solana.yaml</outputFile>
+                        <outputFile>${dir.target.temp}/openapi.yaml</outputFile>
                     </schema>
                     <dependencies>
                         <dependency>
-                            <name>solana-protocol-model</name>
+                            <name>solana-protocol-api</name>
+                            <schemaFile>solana.yaml</schemaFile>
                             <packageName>${codegen.package}</packageName>
                         </dependency>
                     </dependencies>
@@ -65,12 +81,12 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${dir.target.classes}/solana.yaml</inputSpec>
-                            <apiPackage>com.rarible.solana.protocol.api.controller</apiPackage>
-                            <generatorName>rarible-server</generatorName>
+                            <generatorName>rarible-client</generatorName>
+                            <inputSpec>${dir.target.temp}/openapi.yaml</inputSpec>
                             <generateModels>false</generateModels>
                             <generateApiTests>false</generateApiTests>
                             <generateApis>true</generateApis>
+                            <apiPackage>com.rarible.solana.protocol.api.client</apiPackage>
                             <generateModelTests>false</generateModelTests>
                             <modelPackage>${codegen.package}</modelPackage>
                         </configuration>

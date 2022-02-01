@@ -50,6 +50,40 @@ components:
         - address
         - supply
 
+    #################### Solana - Events ####################
+    TokenEvent:
+      required:
+        - eventId
+        - address
+      properties:
+        eventId:
+          type: string
+        address:
+          type: string
+      oneOf:
+        - $ref: "#/components/schemas/TokenUpdateEvent"
+        - $ref: "#/components/schemas/TokenDeleteEvent"
+    TokenUpdateEvent:
+      type: object
+      required:
+        - token
+      properties:
+        type:
+          type: string
+          enum:
+            - UPDATE
+        token:
+          $ref: "#/components/schemas/Token"
+    TokenDeleteEvent:
+      type: object
+      required:
+        - address
+      properties:
+        type:
+          type: string
+          enum:
+            - DELETE
+
     #################### Solana - Errors ####################
 
     SolanaApiErrorEntityNotFound:

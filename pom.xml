@@ -34,7 +34,7 @@
     </distributionManagement>
 
     <properties>
-        <revision>0.0.2</revision>
+        <revision>0.0.3</revision>
 
         <openapi.plugin.version>5.1.0</openapi.plugin.version>
         <rarible.codegen.server.version>1.2.0</rarible.codegen.server.version>
@@ -75,6 +75,11 @@
             <dependency>
                 <groupId>com.rarible.solana.protocol</groupId>
                 <artifactId>solana-protocol-model</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.rarible.solana.protocol</groupId>
+                <artifactId>solana-protocol-subscriber</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
@@ -138,5 +143,7 @@
         <module>solana-protocol-client</module>
         <module>solana-protocol-client-starter</module>
         <module>solana-protocol-model</module>
+        <module>solana-protocol-subscriber</module>
+        <module>solana-protocol-subscriber-starter</module>
     </modules>
 </project>

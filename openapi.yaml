@@ -5,7 +5,7 @@ info:
 
 paths:
 
-  ######################### Token API #########################
+  ######################### Solana - API #########################
 
   /v0.1/tokens/{tokenAddress}:
     get:
@@ -34,9 +34,36 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  /v0.1/balance/{accountAddress}:
+    get:
+      tags:
+        - balance-controller
+      description: "Returns balance by account address"
+      operationId: getBalanceByAccount
+      parameters:
+        - name: "accountAddress"
+          in: path
+          required: true
+          description: "Account address in base58"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Balance"
+        '404':
+          $ref: "#/components/responses/EntityNotFound"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
 components:
   schemas:
-    #################### Token - Solana ####################
+    #################### Solana - Model ####################
     Token:
       type: object
       properties:
@@ -49,6 +76,18 @@ components:
       required:
         - address
         - supply
+
+    Balance:
+      required:
+        - account
+        - value
+      type: object
+      properties:
+        account:
+          type: string
+          description: Account address in base58
+        value:
+          "$ref": "#/components/schemas/BigInteger"
 
     #################### Solana - Events ####################
     TokenEvent:
@@ -84,6 +123,29 @@ components:
           enum:
             - DELETE
 
+    BalanceEvent:
+      required:
+        - eventId
+        - account
+      properties:
+        eventId:
+          type: string
+        account:
+          description: Account address in base58
+          type: string
+      oneOf:
+        - $ref: "#/components/schemas/BalanceUpdateEvent"
+    BalanceUpdateEvent:
+      type: object
+      required:
+        - balance
+      properties:
+        type:
+          type: string
+          enum:
+            - UPDATE
+        balance:
+          $ref: "#/components/schemas/Balance"
     #################### Solana - Errors ####################
 
     SolanaApiErrorEntityNotFound:

@@ -11,5 +11,9 @@ class SolanaEventTopicProvider {
 
         fun getTokenTopic(environment: String): String =
             "solana.protocol.$environment.token"
+
+        fun getBalanceTopic(environment: String): String =
+            "solana.protocol.$environment.balance"
+
     }
 }

@@ -72,7 +72,7 @@ components:
         supply:
           $ref: "#/components/schemas/BigInteger"
         collection:
-          type: string
+          $ref: "#/components/schemas/Collection"
       required:
         - address
         - supply
@@ -88,6 +88,45 @@ components:
           description: Account address in base58
         value:
           "$ref": "#/components/schemas/BigInteger"
+
+    Collection:
+      oneOf:
+        - $ref: "#/components/schemas/JsonCollection"
+        - $ref: "#/components/schemas/OnChainCollection"
+    JsonCollection:
+      type: object
+      description: Metaplex collection descriptor for version 1.0.0, which is stored in a remote JSON, see https://docs.metaplex.com/token-metadata/Versions/v1.0.0/nft-standard
+      required:
+        - name
+        - family
+        - hash
+      properties:
+        type:
+          type: string
+          enum:
+            - JSON_COLLECTION
+        name:
+          type: string
+        family:
+          type: string
+        hash:
+          description: Unique hash of the collection, helps to distinguish collections with the same name/family created by different minters
+          type: string
+    OnChainCollection:
+      type: object
+      description: Metaplex collection descriptor for version 1.1.0, which is stored on-chain, see https://docs.metaplex.com/token-metadata/Versions/v1.1.0/overview
+      required:
+        - address
+        - verified
+      properties:
+        address:
+          type: string
+        verified:
+          type: boolean
+        type:
+          type: string
+          enum:
+            - ON_CHAIN_COLLECTION
 
     #################### Solana - Events ####################
     TokenEvent:

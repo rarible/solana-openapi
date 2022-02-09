@@ -94,12 +94,18 @@ components:
       properties:
         address:
           type: string
+        creators:
+          type: array
+          description: Creators of the token, may be empty, but if present, the 'share' sums up to 100
+          items:
+            "$ref": "#/components/schemas/TokenCreatorPart"
         supply:
           $ref: "#/components/schemas/BigInteger"
         collection:
           $ref: "#/components/schemas/Collection"
       required:
-        - address
+        - addres
+        - creators
         - supply
 
     Balance:
@@ -255,6 +261,17 @@ components:
         width:
           type: integer
         height:
+          type: integer
+
+    TokenCreatorPart:
+      required:
+        - address
+        - share
+      type: object
+      properties:
+        address:
+          type: string
+        share:
           type: integer
 
     #################### Solana - Events ####################

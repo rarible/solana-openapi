@@ -34,6 +34,31 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  /v0.1/tokens/{tokenAddress}/meta:
+    get:
+      tags:
+        - token-controller
+      description: Returns the token meta by token address
+      operationId: getTokenMetaByAddress
+      parameters:
+        - name: tokenAddress
+          in: path
+          description: "Token address in base58"
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokenMeta"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   /v0.1/balance/{accountAddress}:
     get:
       tags:
@@ -127,6 +152,110 @@ components:
           type: string
           enum:
             - ON_CHAIN_COLLECTION
+
+    TokenMeta:
+      type: object
+      properties:
+        name:
+          type: string
+          description: "Name of the token"
+        description:
+          type: string
+          description: "Description of the token"
+        collection:
+          "$ref": "#/components/schemas/TokenMetaCollection"
+        attributes:
+          type: array
+          description: "Attributes of the token"
+          items:
+            "$ref": "#/components/schemas/TokenMetaAttribute"
+        content:
+          type: array
+          description: "Token content information"
+          items:
+            $ref: "#/components/schemas/TokenMetaContent"
+      required:
+        - name
+        - attributes
+        - content
+
+    TokenMetaCollection:
+      type: object
+      description: Metaplex collection descriptor for version 1.0.0, which is stored in a remote JSON, see https://docs.metaplex.com/token-metadata/Versions/v1.0.0/nft-standard
+      required:
+        - name
+        - family
+        - hash
+      properties:
+        name:
+          type: string
+        family:
+          type: string
+        hash:
+          description: Unique hash of the collection, helps to distinguish collections with the same name/family created by different minters
+          type: string
+
+    TokenMetaAttribute:
+      required:
+        - key
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+        type:
+          type: string
+        format:
+          type: string
+
+    TokenMetaContent:
+      type: object
+      properties:
+        url:
+          type: string
+        representation:
+          type: string
+          enum:
+            - PREVIEW
+            - BIG
+            - ORIGINAL
+        mimeType:
+          type: string
+          example: "image/png"
+        size:
+          type: integer
+          format: int64
+      required:
+        - url
+        - representation
+      oneOf:
+        - $ref: "#/components/schemas/ImageContent"
+        - $ref: "#/components/schemas/VideoContent"
+
+    ImageContent:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - IMAGE
+        width:
+          type: integer
+        height:
+          type: integer
+
+    VideoContent:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - VIDEO
+        width:
+          type: integer
+        height:
+          type: integer
 
     #################### Solana - Events ####################
     TokenEvent:

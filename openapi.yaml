@@ -103,10 +103,20 @@ components:
           $ref: "#/components/schemas/BigInteger"
         collection:
           $ref: "#/components/schemas/Collection"
+        createdAt:
+          type: string
+          format: date-time
+          description: "Datetime when the token was created"
+        updatedAt:
+          type: string
+          format: date-time
+          description: "Datetime when the token was updated"
       required:
         - address
         - creators
         - supply
+        - createdAt
+        - updatedAt
 
     Balance:
       required:

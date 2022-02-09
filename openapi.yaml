@@ -104,7 +104,7 @@ components:
         collection:
           $ref: "#/components/schemas/Collection"
       required:
-        - addres
+        - address
         - creators
         - supply
 

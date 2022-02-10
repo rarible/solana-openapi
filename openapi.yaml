@@ -94,15 +94,8 @@ components:
       properties:
         address:
           type: string
-        creators:
-          type: array
-          description: Creators of the token, may be empty, but if present, the 'share' sums up to 100
-          items:
-            "$ref": "#/components/schemas/TokenCreatorPart"
         supply:
           $ref: "#/components/schemas/BigInteger"
-        collection:
-          $ref: "#/components/schemas/Collection"
         createdAt:
           type: string
           format: date-time
@@ -111,12 +104,14 @@ components:
           type: string
           format: date-time
           description: "Datetime when the token was updated"
+        closed:
+          type: boolean
       required:
         - address
-        - creators
         - supply
         - createdAt
         - updatedAt
+        - closed
 
     Balance:
       required:
@@ -178,6 +173,11 @@ components:
         description:
           type: string
           description: "Description of the token"
+        creators:
+          type: array
+          description: Creators of the token, may be empty, but if present, the 'share' sums up to 100
+          items:
+            "$ref": "#/components/schemas/TokenCreatorPart"
         collection:
           "$ref": "#/components/schemas/TokenMetaCollection"
         attributes:
@@ -196,6 +196,10 @@ components:
         - content
 
     TokenMetaCollection:
+      oneOf:
+        - $ref: "#/components/schemas/TokenMetaOffChainCollection"
+        - $ref: "#/components/schemas/TokenMetaOnChainCollection"
+    TokenMetaOffChainCollection:
       type: object
       description: Metaplex collection descriptor for version 1.0.0, which is stored in a remote JSON, see https://docs.metaplex.com/token-metadata/Versions/v1.0.0/nft-standard
       required:
@@ -203,6 +207,10 @@ components:
         - family
         - hash
       properties:
+        type:
+          type: string
+          enum:
+            - TOKEN_META_OFF_CHAIN_COLLECTION
         name:
           type: string
         family:
@@ -210,6 +218,21 @@ components:
         hash:
           description: Unique hash of the collection, helps to distinguish collections with the same name/family created by different minters
           type: string
+    TokenMetaOnChainCollection:
+      type: object
+      description: Metaplex collection descriptor for version 1.1.0, which is stored on-chain, see https://docs.metaplex.com/token-metadata/Versions/v1.1.0/overview
+      required:
+        - address
+        - verified
+      properties:
+        address:
+          type: string
+        verified:
+          type: boolean
+        type:
+          type: string
+          enum:
+            - TOKEN_META_ON_CHAIN_COLLECTION
 
     TokenMetaAttribute:
       required:

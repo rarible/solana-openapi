@@ -15,5 +15,5 @@ class FixedSolanaApiServiceUriProvider(
 class SwarmSolanaApiServiceUriProvider(
     private val environment: String
 ) : SolanaApiServiceUriProvider {
-    override fun getUri(): URI = URI.create(String.format("http://%s-solana-protocol-api:8080", environment))
+    override fun getUri(): URI = URI.create(String.format("http://%s-solana-api:8080", environment))
 }

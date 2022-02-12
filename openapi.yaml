@@ -117,6 +117,8 @@ components:
       required:
         - account
         - value
+        - createdAt
+        - updatedAt
       type: object
       properties:
         account:

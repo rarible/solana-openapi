@@ -122,6 +122,14 @@ components:
         account:
           type: string
           description: Account address in base58
+        createdAt:
+          type: string
+          format: date-time
+          description: "Datetime when the token was created"
+        updatedAt:
+          type: string
+          format: date-time
+          description: "Datetime when the token was updated"
         value:
           "$ref": "#/components/schemas/BigInteger"
 

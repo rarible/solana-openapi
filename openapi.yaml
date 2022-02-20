@@ -140,6 +140,8 @@ components:
     Balance:
       required:
         - account
+        - owner
+        - mint
         - value
         - createdAt
         - updatedAt
@@ -148,6 +150,12 @@ components:
         account:
           type: string
           description: Account address in base58
+        owner:
+          type: string
+          description: Owner address in base58
+        mint:
+          type: string
+          description: Token mint in base58
         createdAt:
           type: string
           format: date-time

@@ -85,6 +85,30 @@ paths:
           $ref: "#/components/responses/BadRequest"
         '500':
           $ref: "#/components/responses/ServerError"
+  /v0.1/balance/byOwner:
+    get:
+      tags:
+        - balance-controller
+      description: "Returns balance by owner"
+      operationId: getBalanceByOwner
+      parameters:
+        - name: "owner"
+          in: query
+          required: true
+          description: "Address of the owner"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Balances"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
 
 components:
   schemas:
@@ -134,6 +158,23 @@ components:
           description: "Datetime when the token was updated"
         value:
           "$ref": "#/components/schemas/BigInteger"
+
+    Balances:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int64
+          description: "Number of balances found by request"
+        balances:
+          type: array
+          description: "List of found balances"
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/Balance"
+      required:
+        - total
+        - balances
 
     Collection:
       oneOf:

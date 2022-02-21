@@ -33,6 +33,30 @@ paths:
           $ref: "#/components/responses/BadRequest"
         '500':
           $ref: "#/components/responses/ServerError"
+  /v0.1/tokens/byCollection:
+    get:
+      tags:
+        - token-controller
+      description: Returns the tokens by collection
+      operationId: getTokensByCollection
+      parameters:
+        - name: collection
+          in: query
+          description: "ID of the collection"
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tokens"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
 
   /v0.1/tokens/{tokenAddress}/meta:
     get:
@@ -136,6 +160,22 @@ components:
         - createdAt
         - updatedAt
         - closed
+    Tokens:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int64
+          description: "Number of tokens found by request"
+        tokens:
+          type: array
+          description: "List of found tokens"
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/Token"
+      required:
+        - total
+        - tokens
 
     Balance:
       required:

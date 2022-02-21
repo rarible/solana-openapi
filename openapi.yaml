@@ -109,6 +109,30 @@ paths:
           $ref: "#/components/responses/BadRequest"
         '500':
           $ref: "#/components/responses/ServerError"
+  /v0.1/balance/byMint:
+    get:
+      tags:
+        - balance-controller
+      description: "Returns balance by mint"
+      operationId: getBalanceByMint
+      parameters:
+        - name: "mint"
+          in: query
+          required: true
+          description: "Address of the mint"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Balances"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
   /v0.1/balance/byOwner:
     get:
       tags:

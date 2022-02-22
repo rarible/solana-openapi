@@ -170,6 +170,11 @@ components:
           $ref: "#/components/schemas/BigInteger"
         collection:
           $ref: "#/components/schemas/Collection"
+        creators:
+          type: array
+          description: Creators of the token, may be empty, but if present, the 'share' sums up to 100
+          items:
+            "$ref": "#/components/schemas/TokenCreatorPart"
         createdAt:
           type: string
           format: date-time

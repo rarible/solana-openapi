@@ -88,7 +88,7 @@ paths:
       description: Returns the tokens by addresses
       operationId: getTokensByAddresses
       parameters:
-        - name: owner
+        - name: tokenAddresses
           in: query
           description: "Addresses of the tokens"
           required: true

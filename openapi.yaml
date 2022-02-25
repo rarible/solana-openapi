@@ -93,7 +93,7 @@ paths:
           description: "Addresses of the tokens"
           required: true
           schema:
-            type: string
+            type: array
       responses:
         '200':
           description: "OK"

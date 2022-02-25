@@ -94,6 +94,8 @@ paths:
           required: true
           schema:
             type: array
+            items:
+              type: string
       responses:
         '200':
           description: "OK"

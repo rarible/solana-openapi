@@ -57,7 +57,54 @@ paths:
           $ref: "#/components/responses/BadRequest"
         '500':
           $ref: "#/components/responses/ServerError"
-
+  /v0.1/tokens/byOwner:
+    get:
+      tags:
+        - token-controller
+      description: Returns the tokens by owner
+      operationId: getTokensByOwner
+      parameters:
+        - name: owner
+          in: query
+          description: "Owner of the token"
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tokens"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+  /v0.1/tokens/ByAddresses:
+    get:
+      tags:
+        - token-controller
+      description: Returns the tokens by addresses
+      operationId: getTokensByAddresses
+      parameters:
+        - name: owner
+          in: query
+          description: "Addresses of the tokens"
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tokens"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
   /v0.1/tokens/{tokenAddress}/meta:
     get:
       tags:

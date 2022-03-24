@@ -37,7 +37,7 @@ paths:
   "/v0.1/tokens/{tokenAddress}/royalties":
     get:
       tags:
-        - item-controller
+        - token-controller
       description: Returns item royalty by identifier
       operationId: getTokenRoyaltiesByAddress
       parameters:
@@ -114,7 +114,7 @@ paths:
   "/v0.1/tokens/{tokenAddress}/resetMeta":
     delete:
       tags:
-        - item-controller
+        - token-controller
       description: "Deletes the NFT item meta by Id"
       operationId: resetTokenMeta
       parameters:

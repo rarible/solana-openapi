@@ -5,7 +5,7 @@ info:
 
 paths:
 
-  ######################### Solana - API #########################
+  ######################### Token (Item) API #########################
 
   /v0.1/tokens/{tokenAddress}:
     get:
@@ -33,55 +33,33 @@ paths:
           $ref: "#/components/responses/BadRequest"
         '500':
           $ref: "#/components/responses/ServerError"
-  /v0.1/tokens/byCollection:
+
+  "/v0.1/tokens/{tokenAddress}/royalties":
     get:
       tags:
-        - token-controller
-      description: Returns the tokens by collection
-      operationId: getTokensByCollection
+        - item-controller
+      description: Returns item royalty by identifier
+      operationId: getTokenRoyaltiesByAddress
       parameters:
-        - name: collection
-          in: query
-          description: "ID of the collection"
+        - name: "tokenAddress"
+          in: path
           required: true
+          description: "Token address in base58"
           schema:
             type: string
       responses:
         '200':
-          description: "OK"
+          description: OK
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Tokens"
+                $ref: "#/components/schemas/Royalties"
         '400':
           $ref: "#/components/responses/BadRequest"
         '500':
           $ref: "#/components/responses/ServerError"
-  /v0.1/tokens/byOwner:
-    get:
-      tags:
-        - token-controller
-      description: Returns the tokens by owner
-      operationId: getTokensByOwner
-      parameters:
-        - name: owner
-          in: query
-          description: "Owner of the token"
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Tokens"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-  /v0.1/tokens/byAddresses:
+
+  /v0.1/tokens/byIds:
     get:
       tags:
         - token-controller
@@ -107,6 +85,7 @@ paths:
           $ref: "#/components/responses/BadRequest"
         '500':
           $ref: "#/components/responses/ServerError"
+
   /v0.1/tokens/{tokenAddress}/meta:
     get:
       tags:
@@ -132,7 +111,192 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
-  /v0.1/balance/{accountAddress}:
+  "/v0.1/tokens/{tokenAddress}/resetMeta":
+    delete:
+      tags:
+        - item-controller
+      description: "Deletes the NFT item meta by Id"
+      operationId: resetTokenMeta
+      parameters:
+        - name: "tokenAddress"
+          in: path
+          required: true
+          description: "Token address in base58"
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  /v0.1/tokens/byCollection:
+    get:
+      tags:
+        - token-controller
+      description: Returns the tokens by collection
+      operationId: getTokensByCollection
+      parameters:
+        - name: collection
+          in: query
+          description: "ID of the collection"
+          required: true
+          schema:
+            type: string
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tokens"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  /v0.1/tokens/byOwner:
+    get:
+      tags:
+        - token-controller
+      description: Returns the tokens by owner
+      operationId: getTokensByOwner
+      parameters:
+        - name: owner
+          in: query
+          description: "Owner of the token"
+          required: true
+          schema:
+            type: string
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tokens"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  /v0.1/tokens/byCreator:
+    get:
+      tags:
+        - token-controller
+      description: Returns the tokens by creator
+      operationId: getTokensByCreator
+      parameters:
+        - name: creator
+          in: query
+          description: "Creator of the token"
+          required: true
+          schema:
+            type: string
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tokens"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  /v0.1/tokens/all:
+    get:
+      tags:
+        - token-controller
+      description: "Returns all items"
+      operationId: getAllTokens
+      parameters:
+        - name: "showDeleted"
+          in: query
+          required: false
+          description: "Include deleted items"
+          schema:
+            type: boolean
+        - name: "lastUpdatedFrom"
+          in: query
+          required: false
+          description: "Filter condition to return only items that have been updated after this date (timestamp)"
+          schema:
+            type: integer
+            format: int64
+        - name: "lastUpdatedTo"
+          in: query
+          required: false
+          description: "Filter condition to return only items that have been updated before this date (timestamp)"
+          schema:
+            type: integer
+            format: "int64"
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tokens"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  ######################### Balance (Ownership) API #########################
+
+  /v0.1/balances/{accountAddress}:
     get:
       tags:
         - balance-controller
@@ -158,7 +322,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         '500':
           $ref: "#/components/responses/ServerError"
-  /v0.1/balance/byMint:
+
+  /v0.1/balances/byMint:
     get:
       tags:
         - balance-controller
@@ -171,6 +336,18 @@ paths:
           description: "Address of the mint"
           schema:
             type: string
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            type: integer
       responses:
         "200":
           description: "OK"
@@ -182,7 +359,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         '500':
           $ref: "#/components/responses/ServerError"
-  /v0.1/balance/byOwner:
+
+  /v0.1/balances/byOwner:
     get:
       tags:
         - balance-controller
@@ -195,6 +373,18 @@ paths:
           description: "Address of the owner"
           schema:
             type: string
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            type: integer
       responses:
         "200":
           description: "OK"
@@ -202,6 +392,125 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Balances"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  ####################### Collection API #######################
+
+  /v0.1/collections/{collection}:
+    get:
+      tags:
+        - collection-controller
+      description: "Returns collection by address"
+      operationId: getCollectionById
+      parameters:
+        - name: "collection"
+          in: path
+          required: true
+          description: "Address of the collection"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Collection"
+        '404':
+          $ref: "#/components/responses/EntityNotFound"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/collections/{collection}/refreshMeta":
+    delete:
+      tags:
+        - collection-controller
+      description: "Refreshes metadata for all items in the NFT collection"
+      operationId: refreshCollectionMeta
+      parameters:
+        - name: "collection"
+          in: path
+          required: true
+          description: "Address of the collection"
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  /v0.1/collections/byOwner:
+    get:
+      tags:
+        - collection-controller
+      description: "Returns collection by owner"
+      operationId: getCollectionsByOwner
+      parameters:
+        - name: "owner"
+          in: query
+          description: "Owner of searching collections"
+          required: true
+          schema:
+            type: string
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Collections"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  /v0.1/collections/all:
+    get:
+      tags:
+        - collection-controller
+      description: "Returns all collections"
+      operationId: getAllCollections
+      parameters:
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Collections"
         '400':
           $ref: "#/components/responses/BadRequest"
         '500':
@@ -218,7 +527,7 @@ components:
         supply:
           $ref: "#/components/schemas/BigInteger"
         collection:
-          $ref: "#/components/schemas/Collection"
+          type: string
         creators:
           type: array
           description: Creators of the token, may be empty, but if present, the 'share' sums up to 100
@@ -245,21 +554,20 @@ components:
         - createdAt
         - updatedAt
         - closed
+
     Tokens:
       type: object
       properties:
-        total:
-          type: integer
-          format: int64
-          description: "Number of tokens found by request"
         tokens:
           type: array
           description: "List of found tokens"
           default: [ ]
           items:
             $ref: "#/components/schemas/Token"
+        continuation:
+          type: string
+          description: "Continuation token to paginate balances search result"
       required:
-        - total
         - tokens
 
     Balance:
@@ -282,7 +590,7 @@ components:
           type: string
           description: Token mint in base58
         collection:
-          $ref: "#/components/schemas/Collection"
+          type: string
         createdAt:
           type: string
           format: date-time
@@ -297,58 +605,135 @@ components:
     Balances:
       type: object
       properties:
-        total:
-          type: integer
-          format: int64
-          description: "Number of balances found by request"
         balances:
           type: array
           description: "List of found balances"
           default: [ ]
           items:
             $ref: "#/components/schemas/Balance"
+        continuation:
+          type: string
+          description: "Continuation token to paginate balances search result"
       required:
-        - total
         - balances
 
+#    Collection:
+#      oneOf:
+#        - $ref: "#/components/schemas/JsonCollection"
+#        - $ref: "#/components/schemas/OnChainCollection"
+#    JsonCollection:
+#      type: object
+#      description: Metaplex collection descriptor for version 1.0.0, which is stored in a remote JSON, see https://docs.metaplex.com/token-metadata/Versions/v1.0.0/nft-standard
+#      required:
+#        - name
+#        - family
+#        - hash
+#      properties:
+#        type:
+#          type: string
+#          enum:
+#            - JSON_COLLECTION
+#        name:
+#          type: string
+#        family:
+#          type: string
+#        hash:
+#          description: Unique hash of the collection, helps to distinguish collections with the same name/family created by different minters
+#          type: string
+#    OnChainCollection:
+#      type: object
+#      description: Metaplex collection descriptor for version 1.1.0, which is stored on-chain, see https://docs.metaplex.com/token-metadata/Versions/v1.1.0/overview
+#      required:
+#        - address
+#        - verified
+#      properties:
+#        address:
+#          type: string
+#        verified:
+#          type: boolean
+#        type:
+#          type: string
+#          enum:
+#            - ON_CHAIN_COLLECTION
+
     Collection:
-      oneOf:
-        - $ref: "#/components/schemas/JsonCollection"
-        - $ref: "#/components/schemas/OnChainCollection"
-    JsonCollection:
       type: object
-      description: Metaplex collection descriptor for version 1.0.0, which is stored in a remote JSON, see https://docs.metaplex.com/token-metadata/Versions/v1.0.0/nft-standard
-      required:
-        - name
-        - family
-        - hash
-      properties:
-        type:
-          type: string
-          enum:
-            - JSON_COLLECTION
-        name:
-          type: string
-        family:
-          type: string
-        hash:
-          description: Unique hash of the collection, helps to distinguish collections with the same name/family created by different minters
-          type: string
-    OnChainCollection:
-      type: object
-      description: Metaplex collection descriptor for version 1.1.0, which is stored on-chain, see https://docs.metaplex.com/token-metadata/Versions/v1.1.0/overview
-      required:
-        - address
-        - verified
       properties:
         address:
           type: string
-        verified:
-          type: boolean
-        type:
+        parent:
           type: string
-          enum:
-            - ON_CHAIN_COLLECTION
+        name:
+          type: string
+        symbol:
+          type: string
+        owner:
+          type: string
+        features:
+          type: array
+          default: [ ]
+          items:
+            type: string
+            enum:
+              - APPROVE_FOR_ALL
+              - SET_URI_PREFIX
+              - BURN
+              - MINT_WITH_ADDRESS
+              - SECONDARY_SALE_FEES
+              - MINT_AND_TRANSFER
+        creators:
+          type: array
+          description: "List of addresses that can mint items in this collection"
+          items:
+            type: string
+        meta:
+          "$ref": "#/components/schemas/CollectionMeta"
+      required:
+        - address
+        - name
+        - features
+
+    Collections:
+      type: object
+      properties:
+        collections:
+          default: [ ]
+          type: array
+          items:
+            $ref: "#/components/schemas/Collection"
+        continuation:
+          type: string
+          description: "Continuation token to paginate collections search result"
+      required:
+        - collections
+
+    CollectionMeta:
+      type: object
+      properties:
+        name:
+          type: string
+          description: "Name of the collection"
+        description:
+          type: string
+          description: "Description of the collection"
+        content:
+          default: [ ]
+          type: array
+          items:
+            "$ref": "#/components/schemas/TokenMetaContent"
+        externalLink:
+          type: string
+          description: "External link to the original website for the collection"
+        sellerFeeBasisPoints:
+          type: integer
+          format: int32
+          description: "Indicates a 1% seller fee"
+        feeRecipient:
+          description: "Where seller fees will be paid to"
+          type: string
+      required:
+        - name
+        - content
 
     TokenMeta:
       type: object
@@ -364,8 +749,6 @@ components:
           description: Creators of the token, may be empty, but if present, the 'share' sums up to 100
           items:
             "$ref": "#/components/schemas/TokenCreatorPart"
-        collection:
-          "$ref": "#/components/schemas/Collection"
         attributes:
           type: array
           description: "Attributes of the token"
@@ -454,7 +837,29 @@ components:
         share:
           type: integer
 
+    Royalty:
+      type: object
+      properties:
+        account:
+          type: string
+        value:
+          type: integer
+      required:
+        - account
+        - value
+
+    Royalties:
+      type: object
+      properties:
+        royalties:
+          type: array
+          items:
+            $ref: "#/components/schemas/Royalty"
+      required:
+        - royalties
+
     #################### Solana - Events ####################
+
     TokenEvent:
       required:
         - eventId
@@ -511,6 +916,7 @@ components:
             - UPDATE
         balance:
           $ref: "#/components/schemas/Balance"
+
     #################### Solana - Errors ####################
 
     SolanaApiErrorEntityNotFound:

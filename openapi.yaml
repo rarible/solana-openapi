@@ -260,6 +260,103 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  /v0.1/activities/byCollection:
+    get:
+      tags:
+        - activity-controller
+      description: "Returns activities by collection"
+      operationId: getActivitiesByCollection
+      parameters:
+        - name: "type"
+          in: query
+          required: true
+          description: "Activity type"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/components/schemas/ActivityType"
+        - name: "collection"
+          in: query
+          required: true
+          description: "Hash of the collection"
+          schema:
+            type: string
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            type: integer
+        - name: "sort"
+          in: query
+          required: false
+          description: "Sorting by data update time"
+          schema:
+            "$ref": "#/components/schemas/ActivitySort"
+      responses:
+        "200":
+          description: "OK"
+          content: #mint _class data _id
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Activities"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  /v0.1/activities/all:
+    get:
+      tags:
+        - activity-controller
+      description: "Returns all activities"
+      operationId: getAllActivities
+      parameters:
+        - name: "type"
+          in: query
+          required: true
+          description: "Activity type"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/components/schemas/ActivityType"
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            type: integer
+            format: int32
+        - name: "sort"
+          in: query
+          required: false
+          description: "Sorting by data update time"
+          schema:
+            "$ref": "#/components/schemas/ActivitySort"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Activities"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
 components:
   schemas:
     #################### Solana - Model ####################
@@ -621,9 +718,6 @@ components:
       type: string
       example: 123456.789
 
-#    ActivityId:
-#      type: string
-
     ActivitySort:
       type: string
       enum:
@@ -658,7 +752,6 @@ components:
       properties:
         id:
           type: string
-#          $ref: "#/components/schemas/ActivityId"
         date:
           type: string
           format: "date-time"

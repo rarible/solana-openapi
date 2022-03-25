@@ -39,6 +39,7 @@ class SolanaApiClientAutoConfigurationIt {
         every { webClientCustomizer.customize(any()) } returns Unit
         solanaNftIndexerApiClientFactory.createTokenControllerApiClient()
         solanaNftIndexerApiClientFactory.createBalanceControllerApiClient()
+        solanaNftIndexerApiClientFactory.createCollectionControllerApiClient()
         verify { webClientCustomizer.customize(any()) }
     }
 

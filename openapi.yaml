@@ -516,6 +516,156 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  ######################## Activity API ########################
+
+  /v0.1/activities/byItem:
+    get:
+      tags:
+        - activity-controller
+      description: "Returns activities by item"
+      operationId: getActivitiesByItem
+      parameters:
+        - name: "type"
+          in: query
+          required: true
+          description: "Activity type"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/components/schemas/ActivityType"
+        - name: "tokenAddress"
+          in: path
+          required: true
+          description: "Token address in base58"
+          schema:
+            type: string
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            type: integer
+        - name: sort
+          in: query
+          required: false
+          description: "Sorting by data update time"
+          schema:
+            "$ref": "#/components/schemas/ActivitySort"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Activities"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  /v0.1/activities/byCollection:
+    get:
+      tags:
+        - activity-controller
+      description: "Returns activities by collection"
+      operationId: getActivitiesByCollection
+      parameters:
+        - name: "type"
+          in: query
+          required: true
+          description: "Activity type"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/components/schemas/ActivityType"
+        - name: "collection"
+          in: query
+          required: true
+          description: "Hash of the collection"
+          schema:
+            type: string
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            type: integer
+        - name: "sort"
+          in: query
+          required: false
+          description: "Sorting by data update time"
+          schema:
+            "$ref": "#/components/schemas/ActivitySort"
+      responses:
+        "200":
+          description: "OK"
+          content: #mint _class data _id
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Activities"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  /v0.1/activities/all:
+    get:
+      tags:
+        - activity-controller
+      description: "Returns all activities"
+      operationId: getAllActivities
+      parameters:
+        - name: "type"
+          in: query
+          required: true
+          description: "Activity type"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/components/schemas/ActivityType"
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            type: integer
+            format: int32
+        - name: "sort"
+          in: query
+          required: false
+          description: "Sorting by data update time"
+          schema:
+            "$ref": "#/components/schemas/ActivitySort"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Activities"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
 components:
   schemas:
     #################### Solana - Model ####################
@@ -974,6 +1124,148 @@ components:
       type: string
       example: 123456.789
 
+    ActivitySort:
+      type: string
+      enum:
+        - LATEST_FIRST
+        - EARLIEST_FIRST
+
+    ActivityType:
+      type: string
+      enum:
+        - TRANSFER
+        - MINT
+        - BURN
+
+    Activities:
+      type: object
+      properties:
+        continuation:
+          type: string
+          description: "Continuation token to paginate activities search result"
+        activities:
+          type: array
+          default: [ ]
+          description: "List of found activities"
+          items:
+            $ref: "#/components/schemas/Activity"
+      required:
+        - total
+        - activities
+
+    Activity:
+      type: object
+      properties:
+        id:
+          type: string
+        date:
+          type: string
+          format: "date-time"
+      oneOf:
+        - $ref: "#/components/schemas/MintActivity"
+        - $ref: "#/components/schemas/BurnActivity"
+        - $ref: "#/components/schemas/TransferActivity"
+      required:
+        - id
+        - date
+
+    MintActivity:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - MINT
+        owner:
+          type: string
+        tokenAddress:
+          type: string
+        value:
+          $ref: "#/components/schemas/BigInteger"
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+      required:
+        - "@type"
+        - owner
+        - tokenAddress
+        - value
+        - blockchainInfo
+
+    BurnActivity:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - BURN
+        owner:
+          type: string
+        tokenAddress:
+          type: string
+        value:
+          $ref: "#/components/schemas/BigInteger"
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+      required:
+        - "@type"
+        - owner
+        - tokenAddress
+        - value
+        - blockchainInfo
+
+    TransferActivity:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - TRANSFER
+        from:
+          type: string
+        owner:
+          type: string
+        tokenAddress:
+          type: string
+        value:
+          $ref: "#/components/schemas/BigInteger"
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+      required:
+        - "@type"
+        - from
+        - owner
+        - contract
+        - tokenId
+        - value
+        - transactionHash
+
+    ActivityBlockchainInfo:
+      type: object
+      deprecated: true
+      properties:
+        blockNumber:
+          type: integer
+          format: int64
+        blockHash:
+          type: string
+        transactionIndex:
+          type: integer
+          format: int32
+        transactionHash:
+          type: string
+        instructionIndex:
+          type: integer
+          format: int32
+        innerInstructionIndex:
+          type: integer
+          format: int32
+          default: null
+      required:
+        - blockNumber
+        - blockHash
+        - transactionIndex
+        - transactionHash
+        - instructionIndex
 
   #======================== Responses ============================#
 

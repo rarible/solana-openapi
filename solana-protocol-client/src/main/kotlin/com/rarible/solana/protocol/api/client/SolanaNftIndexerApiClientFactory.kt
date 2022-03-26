@@ -17,6 +17,9 @@ class SolanaNftIndexerApiClientFactory(
     fun createCollectionControllerApiClient(): CollectionControllerApi =
         CollectionControllerApi(createApiClient())
 
+    fun createOrderControllerApiClient(): OrderControllerApi =
+        OrderControllerApi(createApiClient())
+
     private fun createApiClient(): ApiClient {
         return ApiClient(webClientCustomizer)
             .setBasePath(uriProvider.getUri().toASCIIString())

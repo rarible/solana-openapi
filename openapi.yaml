@@ -666,9 +666,83 @@ paths:
         '500':
           $ref: "#/components/responses/ServerError"
 
+  ######################## Order API ########################
+
+  /v0.1/orders/{id}:
+    get:
+      tags:
+        - order-controller
+      description: "Returns order by Id"
+      operationId: getOrderById
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          description: "Order ID"
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        '404':
+          $ref: "#/components/responses/EntityNotFound"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
+  /v0.1/orders/all:
+    get:
+      tags:
+        - order-controller
+      description: "Returns all orders"
+      operationId: getOrdersAll
+      parameters:
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            type: integer
+        - name: "sort"
+          in: query
+          required: false
+          description: "Order sort"
+          schema:
+            $ref: "#/components/schemas/OrderSort"
+        - name: "status"
+          in: query
+          required: false
+          description: "Order status"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/components/schemas/OrderStatus"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Orders"
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
 components:
   schemas:
-    #################### Solana - Model ####################
+    #################### Solana - Token Model ####################
     Token:
       type: object
       properties:
@@ -987,6 +1061,117 @@ components:
         share:
           type: integer
 
+    #################### Solana - Order Model ####################
+    Order:
+      type: object
+      required:
+        - maker
+        - make
+        - take
+        - fill
+        - status
+        - createdAt
+        - updatedAt
+        - hash
+      properties:
+        maker:
+          type: string
+        make:
+          $ref: "#/components/schemas/Asset"
+        take:
+          $ref: "#/components/schemas/Asset"
+        fill:
+          $ref: "#/components/schemas/BigInteger"
+        start:
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        hash:
+          type: string
+        status:
+          $ref: "#/components/schemas/OrderStatus"
+      oneOf:
+        - "$ref": "#/components/schemas/AuctionHouseOrder"
+
+    Orders:
+      type: object
+      properties:
+        continuation:
+          type: string
+          description: "Continuation token to paginate orders search result"
+        total:
+          type: integer
+        orders:
+          type: array
+          description: "List of found orders"
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/Order"
+      required:
+        - total
+        - orders
+
+    AuctionHouseOrder:
+      type: object
+      required:
+        - type
+        - data
+      properties:
+        type:
+          type: string
+          enum:
+            - AUCTION_HOUSE
+
+    OrderStatus:
+      type: string
+      enum:
+        - ACTIVE
+        - FILLED
+        - CANCELLED
+
+    Asset:
+      type: object
+      properties:
+        type:
+          $ref: "#/components/schemas/AssetType"
+        value:
+          $ref: "#/components/schemas/BigDecimal"
+      required:
+        - type
+        - value
+
+    AssetType:
+      type: object
+      oneOf:
+        - $ref: "#/components/schemas/TokenAssetType"
+
+    TokenAssetType:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - TOKEN_ASSET_TYPE
+        mint:
+          type: string
+        isNft:
+          type: boolean
+        isCurrency:
+          type: boolean
+      required:
+        - "@type"
+        - mint
+        - isNft
+        - isCurrency
+
     Royalty:
       type: object
       properties:
@@ -1266,6 +1451,12 @@ components:
         - transactionIndex
         - transactionHash
         - instructionIndex
+
+    OrderSort:
+      type: string
+      enum:
+        - LAST_UPDATE_ASC
+        - LAST_UPDATE_DESC
 
   #======================== Responses ============================#
 

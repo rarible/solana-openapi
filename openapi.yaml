@@ -26,9 +26,9 @@ paths:
             application/json:
               schema:
                 type: boolean
-        '400':
+        "400":
           $ref: "#/components/responses/BadRequest"
-        '500':
+        "500":
           $ref: "#/components/responses/ServerError"
 
   ######################### Token (Item) API #########################
@@ -55,9 +55,9 @@ paths:
                 $ref: "#/components/schemas/Token"
         '404':
           $ref: "#/components/responses/EntityNotFound"
-        '400':
+        "400":
           $ref: "#/components/responses/BadRequest"
-        '500':
+        "500":
           $ref: "#/components/responses/ServerError"
 
   "/v0.1/tokens/{tokenAddress}/royalties":
@@ -80,9 +80,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Royalties"
-        '400':
+        "400":
           $ref: "#/components/responses/BadRequest"
-        '500':
+        "500":
           $ref: "#/components/responses/ServerError"
 
   /v0.1/tokens/byIds:
@@ -107,9 +107,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Tokens"
-        '400':
+        "400":
           $ref: "#/components/responses/BadRequest"
-        '500':
+        "500":
           $ref: "#/components/responses/ServerError"
 
   /v0.1/tokens/{tokenAddress}/meta:
@@ -132,9 +132,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/TokenMeta"
-        '400':
+        "400":
           $ref: "#/components/responses/BadRequest"
-        '500':
+        "500":
           $ref: "#/components/responses/ServerError"
 
   "/v0.1/tokens/{tokenAddress}/resetMeta":
@@ -153,9 +153,9 @@ paths:
       responses:
         '200':
           description: OK
-        '400':
+        "400":
           $ref: "#/components/responses/BadRequest"
-        '500':
+        "500":
           $ref: "#/components/responses/ServerError"
 
   /v0.1/tokens/byCollection:
@@ -190,9 +190,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Tokens"
-        '400':
+        "400":
           $ref: "#/components/responses/BadRequest"
-        '500':
+        "500":
           $ref: "#/components/responses/ServerError"
 
   /v0.1/tokens/byOwner:
@@ -227,9 +227,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Tokens"
-        '400':
+        "400":
           $ref: "#/components/responses/BadRequest"
-        '500':
+        "500":
           $ref: "#/components/responses/ServerError"
 
   /v0.1/tokens/byCreator:
@@ -264,9 +264,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Tokens"
-        '400':
+        "400":
           $ref: "#/components/responses/BadRequest"
-        '500':
+        "500":
           $ref: "#/components/responses/ServerError"
 
   /v0.1/tokens/all:
@@ -315,9 +315,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Tokens"
-        '400':
+        "400":
           $ref: "#/components/responses/BadRequest"
-        '500':
+        "500":
           $ref: "#/components/responses/ServerError"
 
   ######################### Balance (Ownership) API #########################
@@ -344,9 +344,9 @@ paths:
                 $ref: "#/components/schemas/Balance"
         '404':
           $ref: "#/components/responses/EntityNotFound"
-        '400':
+        "400":
           $ref: "#/components/responses/BadRequest"
-        '500':
+        "500":
           $ref: "#/components/responses/ServerError"
 
   /v0.1/balances/byMint:
@@ -381,9 +381,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Balances"
-        '400':
+        "400":
           $ref: "#/components/responses/BadRequest"
-        '500':
+        "500":
           $ref: "#/components/responses/ServerError"
 
   /v0.1/balances/byOwner:
@@ -418,9 +418,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Balances"
-        '400':
+        "400":
           $ref: "#/components/responses/BadRequest"
-        '500':
+        "500":
           $ref: "#/components/responses/ServerError"
 
   ####################### Collection API #######################
@@ -447,9 +447,9 @@ paths:
                 $ref: "#/components/schemas/Collection"
         '404':
           $ref: "#/components/responses/EntityNotFound"
-        '400':
+        "400":
           $ref: "#/components/responses/BadRequest"
-        '500':
+        "500":
           $ref: "#/components/responses/ServerError"
 
   "/v0.1/collections/{collection}/refreshMeta":
@@ -468,9 +468,9 @@ paths:
       responses:
         '200':
           description: OK
-        '400':
+        "400":
           $ref: "#/components/responses/BadRequest"
-        '500':
+        "500":
           $ref: "#/components/responses/ServerError"
 
   /v0.1/collections/byOwner:
@@ -505,9 +505,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Collections"
-        '400':
+        "400":
           $ref: "#/components/responses/BadRequest"
-        '500':
+        "500":
           $ref: "#/components/responses/ServerError"
 
   /v0.1/collections/all:
@@ -537,9 +537,9 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Collections"
-        '400':
+        "400":
           $ref: "#/components/responses/BadRequest"
-        '500':
+        "500":
           $ref: "#/components/responses/ServerError"
 
   ######################## Activity API ########################
@@ -583,14 +583,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Activities"
-        '400':
+        "400":
           $ref: "#/components/responses/BadRequest"
-        '500':
+        "500":
           $ref: "#/components/responses/ServerError"
 
   ######################## Order API ########################
 
-  /v0.1/orders/{id}:
+  "/v0.1/orders/{id}":
     get:
       tags:
         - order-controller
@@ -612,12 +612,36 @@ paths:
                 $ref: "#/components/schemas/Order"
         '404':
           $ref: "#/components/responses/EntityNotFound"
-        '400':
+        "400":
           $ref: "#/components/responses/BadRequest"
-        '500':
+        "500":
           $ref: "#/components/responses/ServerError"
 
-  /v0.1/orders/all:
+  "/v0.1/orders/byIds":
+    post:
+      tags:
+        - order-controller
+      description: "Returns the orders by specified IDs"
+      operationId: getOrdersByIds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderIds"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Orders"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/orders/all":
     get:
       tags:
         - order-controller
@@ -657,6 +681,323 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Orders"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/orders/sellCurrencies":
+    get:
+      tags:
+        - order-controller
+      operationId: getSellCurrencies
+      description: Returns currencies taken as payment in all sell orders of the item
+      parameters:
+        - name: "itemId"
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: "#/components/responses/OrderCurrenciesPage"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/orders/sell":
+    get:
+      tags:
+        - order-controller
+      description: "Returns all sell orders"
+      operationId: getSellOrders
+      parameters:
+        - name: "origin"
+          in: query
+          required: false
+          description: "Address of the consumer to receive the commission for the order"
+          schema:
+            type: string
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            minimum: 1
+            type: integer
+            format: int32
+      responses:
+        "200":
+          $ref: "#/components/responses/OrderPage"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/orders/sell/byItem":
+    get:
+      tags:
+        - order-controller
+      operationId: getSellOrdersByItem
+      description: Returns all orders for sale by item and order status
+      parameters:
+        - name: "itemId"
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: "currencyId"
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: "maker"
+          description: "The maker of the order"
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: "origin"
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: status
+          description: "The order status"
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/OrderStatus"
+        - name: continuation
+          description: "Continuation token from the previous response"
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: size
+          description: "The number of items to return"
+          in: query
+          required: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int32
+      responses:
+        '200':
+          $ref: "#/components/responses/OrderPage"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/orders/sell/byMaker":
+    get:
+      tags:
+        - order-controller
+      description: "Returns sell orders by maker"
+      operationId: getSellOrdersByMaker
+      parameters:
+        - name: "maker"
+          in: query
+          required: true
+          description: "The maker of the order"
+          schema:
+            type: string
+        - name: "origin"
+          in: query
+          required: false
+          description: "Address of the consumer to receive the commission for the order"
+          schema:
+            type: string
+        - name: "status"
+          in: query
+          required: false
+          description: "Order status"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/components/schemas/OrderStatus"
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            minimum: 1
+            type: integer
+      responses:
+        "200":
+          $ref: "#/components/responses/OrderPage"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/orders/bidCurrencies":
+    get:
+      tags:
+        - order-controller
+      operationId: getBidCurrencies
+      description: Returns currencies made as payment in all bid orders of the item
+      parameters:
+        - name: "itemId"
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: "#/components/responses/OrderCurrenciesPage"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/orders/bids/byItem":
+    get:
+      tags:
+        - order-controller
+      operationId: getOrderBidsByItem
+      description: Returns all order bids by item and order status
+      parameters:
+        - name: "itemId"
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: "currencyId"
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: "maker"
+          description: "The makers of the orders"
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+        - name: "origin"
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: status
+          description: "The order status"
+          in: query
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/OrderStatus"
+        - name: startDate
+          description: "Lower time border of data (unix format)"
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: endDate
+          description: "Upper time border of data (unix format)"
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+        - name: continuation
+          description: "Continuation token from the previous response"
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: size
+          description: "The number of orders to return"
+          in: query
+          required: false
+          schema:
+            minimum: 1
+            type: integer
+            format: int32
+      responses:
+        '200':
+          $ref: "#/components/responses/OrderPage"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  "/v0.1/orders/bids/byMaker":
+    get:
+      tags:
+        - order-controller
+      description: "Returns order bids by maker"
+      operationId: getOrderBidsByMaker
+      parameters:
+        - name: "maker"
+          in: query
+          required: true
+          description: "The maker of the order"
+          schema:
+            type: string
+        - name: "origin"
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: "status"
+          in: query
+          required: false
+          description: "Order status"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/components/schemas/OrderStatus"
+        - name: "start"
+          in: query
+          required: false
+          description: "Lower time border of data (timestamp)"
+          schema:
+            type: integer
+            format: int64
+        - name: "end"
+          in: query
+          required: false
+          description: "Upper time border of data (timestamp)"
+          schema:
+            type: integer
+            format: int64
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            minimum: 1
+            type: integer
+            format: int32
+      responses:
+        "200":
+          $ref: "#/components/responses/OrderPage"
         '400':
           $ref: "#/components/responses/BadRequest"
         '500':
@@ -1012,8 +1353,6 @@ components:
         continuation:
           type: string
           description: "Continuation token to paginate orders search result"
-        total:
-          type: integer
         orders:
           type: array
           description: "List of found orders"
@@ -1021,8 +1360,28 @@ components:
           items:
             $ref: "#/components/schemas/Order"
       required:
-        - total
         - orders
+
+    OrderCurrencies:
+      type: object
+      description: List of distinct currencies in which payments for sell or bid orders were suggested
+      properties:
+        currencies:
+          type: array
+          items:
+            $ref: "#/components/schemas/AssetType"
+      required:
+        - currencies
+
+    OrderIds:
+      type: object
+      required:
+        - ids
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
 
     AuctionHouseOrder:
       type: object
@@ -1294,7 +1653,6 @@ components:
           items:
             $ref: "#/components/schemas/Activity"
       required:
-        - total
         - activities
 
     Activity:
@@ -1544,6 +1902,18 @@ components:
   #======================== Responses ============================#
 
   responses:
+    OrderPage:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Orders"
+    OrderCurrenciesPage:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/OrderCurrencies"
     BadRequest:
       description: Bad Request
       content:

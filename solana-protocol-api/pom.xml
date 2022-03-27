@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.rarible.solana.protocol</groupId>
+        <groupId>com.rarible.protocol.solana</groupId>
         <artifactId>solana-protocol-openapi</artifactId>
         <version>${revision}</version>
     </parent>
@@ -20,7 +20,7 @@
     <dependencies>
         <!-- ============ Solana Protocol-API ============= -->
         <dependency>
-            <groupId>com.rarible.solana.protocol</groupId>
+            <groupId>com.rarible.protocol.solana</groupId>
             <artifactId>solana-protocol-model</artifactId>
         </dependency>
 
@@ -66,7 +66,7 @@
                         </goals>
                         <configuration>
                             <inputSpec>${dir.target.classes}/solana.yaml</inputSpec>
-                            <apiPackage>com.rarible.solana.protocol.api.controller</apiPackage>
+                            <apiPackage>com.rarible.protocol.solana.api.controller</apiPackage>
                             <generatorName>rarible-server</generatorName>
                             <generateModels>false</generateModels>
                             <generateApiTests>false</generateApiTests>

@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.rarible.solana.protocol</groupId>
+        <groupId>com.rarible.protocol.solana</groupId>
         <artifactId>solana-protocol-openapi</artifactId>
         <version>${revision}</version>
     </parent>
@@ -22,12 +22,12 @@
     <dependencies>
         <!-- ============ Solana Protocol-API ============= -->
         <dependency>
-            <groupId>com.rarible.solana.protocol</groupId>
+            <groupId>com.rarible.protocol.solana</groupId>
             <artifactId>solana-protocol-api</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.rarible.solana.protocol</groupId>
+            <groupId>com.rarible.protocol.solana</groupId>
             <artifactId>solana-protocol-model</artifactId>
         </dependency>
 
@@ -86,7 +86,7 @@
                             <generateModels>false</generateModels>
                             <generateApiTests>false</generateApiTests>
                             <generateApis>true</generateApis>
-                            <apiPackage>com.rarible.solana.protocol.api.client</apiPackage>
+                            <apiPackage>com.rarible.protocol.solana.api.client</apiPackage>
                             <generateModelTests>false</generateModelTests>
                             <modelPackage>${codegen.package}</modelPackage>
                         </configuration>

@@ -5,6 +5,32 @@ info:
 
 paths:
 
+  ######################### Sign API #########################
+
+  "/v0.1/signature/validate":
+    post:
+      tags:
+        - signature-controller
+      description: "Validation of the order signature"
+      operationId: validate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SolanaSignatureValidationForm"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '400':
+          $ref: "#/components/responses/BadRequest"
+        '500':
+          $ref: "#/components/responses/ServerError"
+
   ######################### Token (Item) API #########################
 
   /v0.1/tokens/{tokenAddress}:
@@ -518,123 +544,13 @@ paths:
 
   ######################## Activity API ########################
 
-  /v0.1/activities/byItem:
-    get:
+  /v0.1/activities/search:
+    post:
       tags:
         - activity-controller
-      description: "Returns activities by item"
-      operationId: getActivitiesByItem
+      description: "Returns activities by specified filter"
+      operationId: searchActivities
       parameters:
-        - name: "type"
-          in: query
-          required: true
-          description: "Activity type"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/components/schemas/ActivityType"
-        - name: "tokenAddress"
-          in: path
-          required: true
-          description: "Token address in base58"
-          schema:
-            type: string
-        - name: "continuation"
-          in: query
-          required: false
-          description: "Continuation token from the previous response"
-          schema:
-            type: string
-        - name: "size"
-          in: query
-          required: false
-          description: "The number of items to return"
-          schema:
-            type: integer
-        - name: sort
-          in: query
-          required: false
-          description: "Sorting by data update time"
-          schema:
-            "$ref": "#/components/schemas/ActivitySort"
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Activities"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  /v0.1/activities/byCollection:
-    get:
-      tags:
-        - activity-controller
-      description: "Returns activities by collection"
-      operationId: getActivitiesByCollection
-      parameters:
-        - name: "type"
-          in: query
-          required: true
-          description: "Activity type"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/components/schemas/ActivityType"
-        - name: "collection"
-          in: query
-          required: true
-          description: "Hash of the collection"
-          schema:
-            type: string
-        - name: "continuation"
-          in: query
-          required: false
-          description: "Continuation token from the previous response"
-          schema:
-            type: string
-        - name: "size"
-          in: query
-          required: false
-          description: "The number of items to return"
-          schema:
-            type: integer
-        - name: "sort"
-          in: query
-          required: false
-          description: "Sorting by data update time"
-          schema:
-            "$ref": "#/components/schemas/ActivitySort"
-      responses:
-        "200":
-          description: "OK"
-          content: #mint _class data _id
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Activities"
-        '400':
-          $ref: "#/components/responses/BadRequest"
-        '500':
-          $ref: "#/components/responses/ServerError"
-
-  /v0.1/activities/all:
-    get:
-      tags:
-        - activity-controller
-      description: "Returns all activities"
-      operationId: getAllActivities
-      parameters:
-        - name: "type"
-          in: query
-          required: true
-          description: "Activity type"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/components/schemas/ActivityType"
         - name: "continuation"
           in: query
           required: false
@@ -651,9 +567,15 @@ paths:
         - name: "sort"
           in: query
           required: false
-          description: "Sorting by data update time"
+          description: "Sorting activity time"
           schema:
             "$ref": "#/components/schemas/ActivitySort"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ActivityFilter"
       responses:
         "200":
           description: "OK"
@@ -742,6 +664,26 @@ paths:
 
 components:
   schemas:
+
+    #################### Solana - Sign Model ####################
+    SolanaSignatureValidationForm:
+      required:
+        - signer
+        - message
+        - signature
+      type: object
+      properties:
+        signer:
+          type: string
+        publicKey:
+          type: string
+          description: "The creator's public key"
+        message:
+          type: string
+        signature:
+          type: string
+          description: "Digital signature of the signer"
+
     #################### Solana - Token Model ####################
     Token:
       type: object
@@ -793,171 +735,6 @@ components:
           description: "Continuation token to paginate balances search result"
       required:
         - tokens
-
-    Balance:
-      required:
-        - account
-        - owner
-        - mint
-        - value
-        - createdAt
-        - updatedAt
-      type: object
-      properties:
-        account:
-          type: string
-          description: Account address in base58
-        owner:
-          type: string
-          description: Owner address in base58
-        mint:
-          type: string
-          description: Token mint in base58
-        collection:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-          description: "Datetime when the token was created"
-        updatedAt:
-          type: string
-          format: date-time
-          description: "Datetime when the token was updated"
-        value:
-          "$ref": "#/components/schemas/BigInteger"
-
-    Balances:
-      type: object
-      properties:
-        balances:
-          type: array
-          description: "List of found balances"
-          default: [ ]
-          items:
-            $ref: "#/components/schemas/Balance"
-        continuation:
-          type: string
-          description: "Continuation token to paginate balances search result"
-      required:
-        - balances
-
-#    Collection:
-#      oneOf:
-#        - $ref: "#/components/schemas/JsonCollection"
-#        - $ref: "#/components/schemas/OnChainCollection"
-#    JsonCollection:
-#      type: object
-#      description: Metaplex collection descriptor for version 1.0.0, which is stored in a remote JSON, see https://docs.metaplex.com/token-metadata/Versions/v1.0.0/nft-standard
-#      required:
-#        - name
-#        - family
-#        - hash
-#      properties:
-#        type:
-#          type: string
-#          enum:
-#            - JSON_COLLECTION
-#        name:
-#          type: string
-#        family:
-#          type: string
-#        hash:
-#          description: Unique hash of the collection, helps to distinguish collections with the same name/family created by different minters
-#          type: string
-#    OnChainCollection:
-#      type: object
-#      description: Metaplex collection descriptor for version 1.1.0, which is stored on-chain, see https://docs.metaplex.com/token-metadata/Versions/v1.1.0/overview
-#      required:
-#        - address
-#        - verified
-#      properties:
-#        address:
-#          type: string
-#        verified:
-#          type: boolean
-#        type:
-#          type: string
-#          enum:
-#            - ON_CHAIN_COLLECTION
-
-    Collection:
-      type: object
-      properties:
-        address:
-          type: string
-        parent:
-          type: string
-        name:
-          type: string
-        symbol:
-          type: string
-        owner:
-          type: string
-        features:
-          type: array
-          default: [ ]
-          items:
-            type: string
-            enum:
-              - APPROVE_FOR_ALL
-              - SET_URI_PREFIX
-              - BURN
-              - MINT_WITH_ADDRESS
-              - SECONDARY_SALE_FEES
-              - MINT_AND_TRANSFER
-        creators:
-          type: array
-          description: "List of addresses that can mint items in this collection"
-          items:
-            type: string
-        meta:
-          "$ref": "#/components/schemas/CollectionMeta"
-      required:
-        - address
-        - name
-        - features
-
-    Collections:
-      type: object
-      properties:
-        collections:
-          default: [ ]
-          type: array
-          items:
-            $ref: "#/components/schemas/Collection"
-        continuation:
-          type: string
-          description: "Continuation token to paginate collections search result"
-      required:
-        - collections
-
-    CollectionMeta:
-      type: object
-      properties:
-        name:
-          type: string
-          description: "Name of the collection"
-        description:
-          type: string
-          description: "Description of the collection"
-        content:
-          default: [ ]
-          type: array
-          items:
-            "$ref": "#/components/schemas/TokenMetaContent"
-        externalLink:
-          type: string
-          description: "External link to the original website for the collection"
-        sellerFeeBasisPoints:
-          type: integer
-          format: int32
-          description: "Indicates a 1% seller fee"
-        feeRecipient:
-          description: "Where seller fees will be paid to"
-          type: string
-      required:
-        - name
-        - content
 
     TokenMeta:
       type: object
@@ -1060,6 +837,134 @@ components:
           type: string
         share:
           type: integer
+
+    #################### Solana - Balance Model ####################
+    Balance:
+      required:
+        - account
+        - owner
+        - mint
+        - value
+        - createdAt
+        - updatedAt
+      type: object
+      properties:
+        account:
+          type: string
+          description: Account address in base58
+        owner:
+          type: string
+          description: Owner address in base58
+        mint:
+          type: string
+          description: Token mint in base58
+        collection:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+          description: "Datetime when the token was created"
+        updatedAt:
+          type: string
+          format: date-time
+          description: "Datetime when the token was updated"
+        value:
+          "$ref": "#/components/schemas/BigInteger"
+
+    Balances:
+      type: object
+      properties:
+        balances:
+          type: array
+          description: "List of found balances"
+          default: [ ]
+          items:
+            $ref: "#/components/schemas/Balance"
+        continuation:
+          type: string
+          description: "Continuation token to paginate balances search result"
+      required:
+        - balances
+
+    #################### Solana - Collection Model ####################
+    Collection:
+      type: object
+      properties:
+        address:
+          type: string
+        parent:
+          type: string
+        name:
+          type: string
+        symbol:
+          type: string
+        owner:
+          type: string
+        features:
+          type: array
+          default: [ ]
+          items:
+            type: string
+            enum:
+              - APPROVE_FOR_ALL
+              - SET_URI_PREFIX
+              - BURN
+              - MINT_WITH_ADDRESS
+              - SECONDARY_SALE_FEES
+              - MINT_AND_TRANSFER
+        creators:
+          type: array
+          description: "List of addresses that can mint items in this collection"
+          items:
+            type: string
+        meta:
+          "$ref": "#/components/schemas/CollectionMeta"
+      required:
+        - address
+        - name
+        - features
+
+    Collections:
+      type: object
+      properties:
+        collections:
+          default: [ ]
+          type: array
+          items:
+            $ref: "#/components/schemas/Collection"
+        continuation:
+          type: string
+          description: "Continuation token to paginate collections search result"
+      required:
+        - collections
+
+    CollectionMeta:
+      type: object
+      properties:
+        name:
+          type: string
+          description: "Name of the collection"
+        description:
+          type: string
+          description: "Description of the collection"
+        content:
+          default: [ ]
+          type: array
+          items:
+            "$ref": "#/components/schemas/TokenMetaContent"
+        externalLink:
+          type: string
+          description: "External link to the original website for the collection"
+        sellerFeeBasisPoints:
+          type: integer
+          format: int32
+          description: "Indicates a 1% seller fee"
+        feeRecipient:
+          description: "Where seller fees will be paid to"
+          type: string
+      required:
+        - name
+        - content
 
     #################### Solana - Order Model ####################
     Order:
@@ -1193,6 +1098,326 @@ components:
       required:
         - royalties
 
+    #################### Solana - Activity Model ####################
+
+    ActivitySort:
+      type: string
+      enum:
+        - LATEST_FIRST
+        - EARLIEST_FIRST
+
+    ActivityFilter:
+      type: object
+      oneOf:
+        - $ref: "#/components/schemas/ActivityFilterAll"
+        - $ref: "#/components/schemas/ActivityFilterByUser"
+        - $ref: "#/components/schemas/ActivityFilterByItem"
+        - $ref: "#/components/schemas/ActivityFilterByCollection"
+
+    ActivityFilterAll:
+      type: object
+      required:
+        - "@type"
+        - types
+      properties:
+        "@type":
+          type: string
+          enum:
+            - "all"
+        types:
+          type: array
+          items:
+            $ref: "#/components/schemas/ActivityFilterAllType"
+
+    ActivityFilterAllType:
+      type: string
+      enum:
+        - TRANSFER
+        - MINT
+        - BURN
+        - BID
+        - LIST
+        - SELL
+        - CANCEL_BID
+        - CANCEL_LIST
+
+    ActivityFilterByUser:
+      type: object
+      required:
+        - "@type"
+        - types
+        - users
+      properties:
+        "@type":
+          type: string
+          enum:
+            - "by_user"
+        users:
+          type: array
+          items:
+            type: string
+        types:
+          type: array
+          items:
+            $ref: "#/components/schemas/ActivityFilterByUserType"
+        from:
+          type: integer
+          format: int64
+        to:
+          type: integer
+          format: int64
+
+    ActivityFilterByUserType:
+      type: string
+      enum:
+        - TRANSFER_FROM
+        - TRANSFER_TO
+        - MINT
+        - BURN
+        - MAKE_BID
+        - GET_BID
+        - LIST
+        - BUY
+        - SELL
+        - CANCEL_BID
+        - CANCEL_LIST
+
+    ActivityFilterByItem:
+      type: object
+      required:
+        - "@type"
+        - itemId
+        - types
+      properties:
+        "@type":
+          type: string
+          enum:
+            - "by_item"
+        itemId:
+          type: string
+        types:
+          type: array
+          items:
+            $ref: "#/components/schemas/ActivityFilterByItemType"
+
+    ActivityFilterByItemType:
+      type: string
+      enum:
+        - TRANSFER
+        - MINT
+        - BURN
+        - BID
+        - LIST
+        - SELL
+        - CANCEL_BID
+        - CANCEL_LIST
+
+    ActivityFilterByCollection:
+      type: object
+      required:
+        - "@type"
+        - collection
+        - types
+      properties:
+        "@type":
+          type: string
+          enum:
+            - "by_collection"
+        collection:
+          type: string
+        types:
+          type: array
+          items:
+            $ref: "#/components/schemas/ActivityFilterByCollectionType"
+
+    ActivityFilterByCollectionType:
+      type: string
+      enum:
+        - TRANSFER
+        - MINT
+        - BURN
+        - BID
+        - LIST
+        - SELL
+        - CANCEL_BID
+        - CANCEL_LIST
+
+    ActivityType:
+      type: string
+      enum:
+        - TRANSFER
+        - MINT
+        - BURN
+        - BID
+        - LIST
+        - SELL
+        - CANCEL_LIST
+        - CANCEL_BID
+        - AUCTION_BID
+        - AUCTION_CREATED
+        - AUCTION_CANCEL
+        - AUCTION_FINISHED
+        - AUCTION_STARTED
+        - AUCTION_ENDED
+
+    UserActivityType:
+      type: string
+      enum:
+        - TRANSFER_FROM
+        - TRANSFER_TO
+        - MINT
+        - BURN
+        - MAKE_BID
+        - GET_BID
+        - LIST
+        - BUY
+        - SELL
+        - CANCEL_LIST
+        - CANCEL_BID
+        - AUCTION_BID
+        - AUCTION_CREATED
+        - AUCTION_CANCEL
+        - AUCTION_FINISHED
+        - AUCTION_STARTED
+        - AUCTION_ENDED
+
+    Activities:
+      type: object
+      properties:
+        continuation:
+          type: string
+          description: "Continuation token to paginate activities search result"
+        activities:
+          type: array
+          default: [ ]
+          description: "List of found activities"
+          items:
+            $ref: "#/components/schemas/Activity"
+      required:
+        - total
+        - activities
+
+    Activity:
+      type: object
+      properties:
+        id:
+          type: string
+        date:
+          type: string
+          format: "date-time"
+        reverted:
+          type: boolean
+      oneOf:
+        - $ref: "#/components/schemas/MintActivity"
+        - $ref: "#/components/schemas/BurnActivity"
+        - $ref: "#/components/schemas/TransferActivity"
+      required:
+        - id
+        - date
+        - reverted
+
+    MintActivity:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - MINT
+        owner:
+          type: string
+        tokenAddress:
+          type: string
+        value:
+          $ref: "#/components/schemas/BigInteger"
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+      required:
+        - "@type"
+        - owner
+        - tokenAddress
+        - value
+        - blockchainInfo
+
+    BurnActivity:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - BURN
+        owner:
+          type: string
+        tokenAddress:
+          type: string
+        value:
+          $ref: "#/components/schemas/BigInteger"
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+      required:
+        - "@type"
+        - owner
+        - tokenAddress
+        - value
+        - blockchainInfo
+
+    TransferActivity:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - TRANSFER
+        from:
+          type: string
+        owner:
+          type: string
+        tokenAddress:
+          type: string
+        value:
+          $ref: "#/components/schemas/BigInteger"
+        purchase:
+          type: boolean
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+      required:
+        - "@type"
+        - from
+        - owner
+        - contract
+        - tokenId
+        - value
+        - purchase
+        - transactionHash
+        - blockchainInfo
+
+    ActivityBlockchainInfo:
+      type: object
+      deprecated: true
+      properties:
+        blockNumber:
+          type: integer
+          format: int64
+        blockHash:
+          type: string
+        transactionIndex:
+          type: integer
+          format: int32
+        transactionHash:
+          type: string
+        instructionIndex:
+          type: integer
+          format: int32
+        innerInstructionIndex:
+          type: integer
+          format: int32
+          default: null
+      required:
+        - blockNumber
+        - blockHash
+        - transactionIndex
+        - transactionHash
+        - instructionIndex
+
     #################### Solana - Events ####################
 
     TokenEvent:
@@ -1240,6 +1465,7 @@ components:
           type: string
       oneOf:
         - $ref: "#/components/schemas/BalanceUpdateEvent"
+
     BalanceUpdateEvent:
       type: object
       required:
@@ -1308,149 +1534,6 @@ components:
     BigDecimal:
       type: string
       example: 123456.789
-
-    ActivitySort:
-      type: string
-      enum:
-        - LATEST_FIRST
-        - EARLIEST_FIRST
-
-    ActivityType:
-      type: string
-      enum:
-        - TRANSFER
-        - MINT
-        - BURN
-
-    Activities:
-      type: object
-      properties:
-        continuation:
-          type: string
-          description: "Continuation token to paginate activities search result"
-        activities:
-          type: array
-          default: [ ]
-          description: "List of found activities"
-          items:
-            $ref: "#/components/schemas/Activity"
-      required:
-        - total
-        - activities
-
-    Activity:
-      type: object
-      properties:
-        id:
-          type: string
-        date:
-          type: string
-          format: "date-time"
-      oneOf:
-        - $ref: "#/components/schemas/MintActivity"
-        - $ref: "#/components/schemas/BurnActivity"
-        - $ref: "#/components/schemas/TransferActivity"
-      required:
-        - id
-        - date
-
-    MintActivity:
-      type: object
-      properties:
-        "@type":
-          type: string
-          enum:
-            - MINT
-        owner:
-          type: string
-        tokenAddress:
-          type: string
-        value:
-          $ref: "#/components/schemas/BigInteger"
-        blockchainInfo:
-          $ref: "#/components/schemas/ActivityBlockchainInfo"
-      required:
-        - "@type"
-        - owner
-        - tokenAddress
-        - value
-        - blockchainInfo
-
-    BurnActivity:
-      type: object
-      properties:
-        "@type":
-          type: string
-          enum:
-            - BURN
-        owner:
-          type: string
-        tokenAddress:
-          type: string
-        value:
-          $ref: "#/components/schemas/BigInteger"
-        blockchainInfo:
-          $ref: "#/components/schemas/ActivityBlockchainInfo"
-      required:
-        - "@type"
-        - owner
-        - tokenAddress
-        - value
-        - blockchainInfo
-
-    TransferActivity:
-      type: object
-      properties:
-        "@type":
-          type: string
-          enum:
-            - TRANSFER
-        from:
-          type: string
-        owner:
-          type: string
-        tokenAddress:
-          type: string
-        value:
-          $ref: "#/components/schemas/BigInteger"
-        blockchainInfo:
-          $ref: "#/components/schemas/ActivityBlockchainInfo"
-      required:
-        - "@type"
-        - from
-        - owner
-        - contract
-        - tokenId
-        - value
-        - transactionHash
-
-    ActivityBlockchainInfo:
-      type: object
-      deprecated: true
-      properties:
-        blockNumber:
-          type: integer
-          format: int64
-        blockHash:
-          type: string
-        transactionIndex:
-          type: integer
-          format: int32
-        transactionHash:
-          type: string
-        instructionIndex:
-          type: integer
-          format: int32
-        innerInstructionIndex:
-          type: integer
-          format: int32
-          default: null
-      required:
-        - blockNumber
-        - blockHash
-        - transactionIndex
-        - transactionHash
-        - instructionIndex
 
     OrderSort:
       type: string

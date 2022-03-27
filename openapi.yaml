@@ -1161,11 +1161,11 @@ components:
           items:
             $ref: "#/components/schemas/ActivityFilterByUserType"
         from:
-          type: integer
-          format: int64
+          type: string
+          format: date-time
         to:
-          type: integer
-          format: int64
+          type: string
+          format: date-time
 
     ActivityFilterByUserType:
       type: string

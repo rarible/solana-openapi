@@ -1393,6 +1393,26 @@ components:
           type: string
           enum:
             - AUCTION_HOUSE
+        data:
+          $ref: "#/components/schemas/AuctionHouseOrderOrderData"
+
+    AuctionHouseOrderOrderData:
+      type: object
+      oneOf:
+        - "$ref": "#/components/schemas/AuctionHouseOrderDataV1"
+
+    AuctionHouseOrderDataV1:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - AUCTION_HOUSE_ORDER_DATA_V1
+        auctionHouse:
+          type: string
+      required:
+        - "@type"
+        - auctionHouse
 
     OrderStatus:
       type: string

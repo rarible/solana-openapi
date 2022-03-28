@@ -1435,26 +1435,31 @@ components:
     AssetType:
       type: object
       oneOf:
-        - $ref: "#/components/schemas/TokenAssetType"
+        - $ref: "#/components/schemas/SolanaNftAssetType"
+        - $ref: "#/components/schemas/SolanaSolAssetType"
 
-    TokenAssetType:
+    SolanaNftAssetType:
       type: object
       properties:
         "@type":
           type: string
           enum:
-            - TOKEN_ASSET_TYPE
+            - SOLANA_NFT
         mint:
           type: string
-        isNft:
-          type: boolean
-        isCurrency:
-          type: boolean
       required:
         - "@type"
         - mint
-        - isNft
-        - isCurrency
+
+    SolanaSolAssetType:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - SOLANA_SOL
+      required:
+        - "@type"
 
     Royalty:
       type: object

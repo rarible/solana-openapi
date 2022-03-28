@@ -1790,6 +1790,7 @@ components:
       oneOf:
         - $ref: "#/components/schemas/TokenUpdateEvent"
         - $ref: "#/components/schemas/TokenDeleteEvent"
+
     TokenUpdateEvent:
       type: object
       required:
@@ -1801,6 +1802,7 @@ components:
             - UPDATE
         token:
           $ref: "#/components/schemas/Token"
+
     TokenDeleteEvent:
       type: object
       required:
@@ -1823,6 +1825,7 @@ components:
           type: string
       oneOf:
         - $ref: "#/components/schemas/BalanceUpdateEvent"
+        - $ref: "#/components/schemas/BalanceDeleteEvent"
 
     BalanceUpdateEvent:
       type: object
@@ -1835,6 +1838,67 @@ components:
             - UPDATE
         balance:
           $ref: "#/components/schemas/Balance"
+
+    BalanceDeleteEvent:
+      type: object
+      required:
+        - balance
+      properties:
+        type:
+          type: string
+          enum:
+            - DELETE
+        balance:
+          $ref: "#/components/schemas/Balance"
+
+    CollectionEvent:
+      required:
+        - eventId
+        - collectionId
+      properties:
+        eventId:
+          type: string
+        collectionId:
+          type: string
+      oneOf:
+        - $ref: '#/components/schemas/CollectionUpdateEvent'
+
+    CollectionUpdateEvent:
+      type: object
+      required:
+        - collection
+      properties:
+        type:
+          type: string
+          enum:
+            - UPDATE
+        collection:
+          $ref: '#/components/schemas/Collection'
+
+    OrderEvent:
+      type: object
+      required:
+        - eventId
+        - orderId
+      properties:
+        eventId:
+          type: string
+        orderId:
+          type: string
+      oneOf:
+        - "$ref": "#/components/schemas/OrderUpdateEvent"
+
+    OrderUpdateEvent:
+      type: object
+      required:
+        - order
+      properties:
+        type:
+          type: string
+          enum:
+            - UPDATE
+        order:
+          "$ref": "#/components/schemas/Order"
 
     #################### Solana - Errors ####################
 

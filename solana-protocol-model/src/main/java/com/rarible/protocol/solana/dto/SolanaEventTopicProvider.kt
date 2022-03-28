@@ -15,5 +15,14 @@ class SolanaEventTopicProvider {
         fun getBalanceTopic(environment: String): String =
             "solana.protocol.$environment.balance"
 
+        fun getCollectionTopic(environment: String): String =
+            "solana.protocol.$environment.collection"
+
+        fun getOrderTopic(environment: String): String =
+            "solana.protocol.$environment.order"
+
+        fun getActivityTopic(environment: String): String =
+            "solana.protocol.$environment.activity"
+
     }
 }

@@ -1327,7 +1327,7 @@ components:
         take:
           $ref: "#/components/schemas/Asset"
         fill:
-          $ref: "#/components/schemas/BigInteger"
+          $ref: "#/components/schemas/BigDecimal"
         start:
           type: string
           format: date-time

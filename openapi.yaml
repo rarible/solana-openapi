@@ -759,11 +759,13 @@ paths:
           schema:
             type: string
         - name: "maker"
-          description: "The maker of the order"
+          description: "The makers of the order"
           in: query
           required: false
           schema:
-            type: string
+            type: array
+            items:
+              type: string
         - name: "origin"
           in: query
           required: false
@@ -905,14 +907,14 @@ paths:
             type: array
             items:
               $ref: "#/components/schemas/OrderStatus"
-        - name: startDate
+        - name: start
           description: "Lower time border of data (unix format)"
           in: query
           required: false
           schema:
             type: integer
             format: int64
-        - name: endDate
+        - name: end
           description: "Upper time border of data (unix format)"
           in: query
           required: false
@@ -1324,8 +1326,12 @@ components:
           type: string
         make:
           $ref: "#/components/schemas/Asset"
+        makePrice:
+          $ref: "#/components/schemas/BigDecimal"
         take:
           $ref: "#/components/schemas/Asset"
+        takePrice:
+          $ref: "#/components/schemas/BigDecimal"
         fill:
           $ref: "#/components/schemas/BigDecimal"
         start:
@@ -1435,8 +1441,9 @@ components:
     AssetType:
       type: object
       oneOf:
-        - $ref: "#/components/schemas/SolanaNftAssetType"
         - $ref: "#/components/schemas/SolanaSolAssetType"
+        - $ref: "#/components/schemas/SolanaNftAssetType"
+        - $ref: "#/components/schemas/SolanaFtAssetType"
 
     SolanaNftAssetType:
       type: object
@@ -1460,6 +1467,19 @@ components:
             - SOLANA_SOL
       required:
         - "@type"
+
+    SolanaFtAssetType:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - SOLANA_FT
+        mint:
+          type: string
+      required:
+        - "@type"
+        - mint
 
     Royalty:
       type: object

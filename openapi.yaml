@@ -322,33 +322,6 @@ paths:
 
   ######################### Balance (Ownership) API #########################
 
-  /v0.1/balances/{accountAddress}:
-    get:
-      tags:
-        - balance-controller
-      description: "Returns balance by account address"
-      operationId: getBalanceByAccount
-      parameters:
-        - name: "accountAddress"
-          in: path
-          required: true
-          description: "Account address in base58"
-          schema:
-            type: string
-      responses:
-        "200":
-          description: "OK"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Balance"
-        '404':
-          $ref: "#/components/responses/EntityNotFound"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "500":
-          $ref: "#/components/responses/ServerError"
-
   /v0.1/balances/byMint:
     get:
       tags:
@@ -418,6 +391,37 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Balances"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  /v0.1/balances/byMintAndOwner:
+    get:
+      tags:
+        - balance-controller
+      description: "Returns balance by mint/owner pair"
+      operationId: getBalanceByMintAndOwner
+      parameters:
+        - name: "mint"
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: "owner"
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Balance"
+        '404':
+          $ref: "#/components/responses/EntityNotFound"
         "400":
           $ref: "#/components/responses/BadRequest"
         "500":

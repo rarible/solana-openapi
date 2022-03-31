@@ -1817,10 +1817,6 @@ components:
           type: string
         seller:
           type: string
-        buyerOrderHash:
-          type: string
-        sellerOrderHash:
-          type: string
         price:
           $ref: "#/components/schemas/BigDecimal"
         blockchainInfo:

@@ -2016,6 +2016,7 @@ components:
           description: Account address in base58
           type: string
         mint:
+          type: string
           description: Token address in base58 to which the account belongs
       oneOf:
         - $ref: "#/components/schemas/BalanceUpdateEvent"

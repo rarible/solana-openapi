@@ -1718,6 +1718,11 @@ components:
         - $ref: "#/components/schemas/MintActivity"
         - $ref: "#/components/schemas/BurnActivity"
         - $ref: "#/components/schemas/TransferActivity"
+        - $ref: "#/components/schemas/OrderMatchActivity"
+        - $ref: "#/components/schemas/OrderListActivity"
+        - $ref: "#/components/schemas/OrderCancelListActivity"
+        - $ref: "#/components/schemas/OrderBidActivity"
+        - $ref: "#/components/schemas/OrderCancelBidActivity"
       required:
         - id
         - date
@@ -1795,6 +1800,148 @@ components:
         - value
         - purchase
         - transactionHash
+        - blockchainInfo
+
+    OrderMatchActivity:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - SELL
+        nft:
+          $ref: "#/components/schemas/Asset"
+        payment:
+          $ref: "#/components/schemas/Asset"
+        buyer:
+          type: string
+        seller:
+          type: string
+        buyerOrderHash:
+          type: string
+        sellerOrderHash:
+          type: string
+        price:
+          $ref: "#/components/schemas/BigDecimal"
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+        type:
+          type: string
+          enum:
+            - SELL
+            - ACCEPT_BID
+      required:
+        - nft
+        - payment
+        - price
+        - type
+        - buyer
+        - seller
+
+    OrderListActivity:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - LIST
+        hash:
+          type: string
+        maker:
+          type: string
+        make:
+          $ref: "#/components/schemas/Asset"
+        take:
+          $ref: "#/components/schemas/Asset"
+        price:
+          $ref: "#/components/schemas/BigDecimal"
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+      required:
+        - "@type"
+        - hash
+        - maker
+        - make
+        - take
+        - price
+        - blockchainInfo
+
+    OrderCancelListActivity:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - CANCEL_LIST
+        hash:
+          type: string
+        maker:
+          type: string
+        make:
+          $ref: "#/components/schemas/AssetType"
+        take:
+          $ref: "#/components/schemas/AssetType"
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+      required:
+        - "@type"
+        - hash
+        - maker
+        - make
+        - take
+        - blockchainInfo
+
+    OrderBidActivity:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - BID
+        hash:
+          type: string
+        maker:
+          type: string
+        make:
+          $ref: "#/components/schemas/Asset"
+        take:
+          $ref: "#/components/schemas/Asset"
+        price:
+          $ref: "#/components/schemas/BigDecimal"
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+      required:
+        - "@type"
+        - hash
+        - maker
+        - make
+        - take
+        - price
+        - blockchainInfo
+
+    OrderCancelBidActivity:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - CANCEL_BID
+        hash:
+          type: string
+        maker:
+          type: string
+        make:
+          $ref: "#/components/schemas/AssetType"
+        take:
+          $ref: "#/components/schemas/AssetType"
+        blockchainInfo:
+          $ref: "#/components/schemas/ActivityBlockchainInfo"
+      required:
+        - "@type"
+        - hash
+        - maker
+        - make
+        - take
         - blockchainInfo
 
     ActivityBlockchainInfo:

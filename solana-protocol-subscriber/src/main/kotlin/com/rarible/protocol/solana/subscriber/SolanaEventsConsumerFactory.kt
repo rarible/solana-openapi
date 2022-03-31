@@ -18,9 +18,12 @@ class SolanaEventsConsumerFactory(
 
     private val clientIdPrefix = "$environment.$host.${UUID.randomUUID()}"
 
-    fun createTokenEventConsumer(consumerGroup: String): RaribleKafkaConsumer<TokenEventDto> =
+    fun createTokenEventConsumer(
+        consumerGroup: String,
+        clientIdSuffix: String = ""
+    ): RaribleKafkaConsumer<TokenEventDto> =
         RaribleKafkaConsumer(
-            clientId = "$clientIdPrefix.solana.consumer.token",
+            clientId = "$clientIdPrefix.solana.consumer.token$clientIdSuffix",
             valueDeserializerClass = JsonDeserializer::class.java,
             valueClass = TokenEventDto::class.java,
             consumerGroup = consumerGroup,
@@ -28,9 +31,12 @@ class SolanaEventsConsumerFactory(
             bootstrapServers = brokerReplicaSet
         )
 
-    fun createBalanceEventConsumer(consumerGroup: String): RaribleKafkaConsumer<BalanceEventDto> =
+    fun createBalanceEventConsumer(
+        consumerGroup: String,
+        clientIdSuffix: String = ""
+    ): RaribleKafkaConsumer<BalanceEventDto> =
         RaribleKafkaConsumer(
-            clientId = "$clientIdPrefix.solana.consumer.balance",
+            clientId = "$clientIdPrefix.solana.consumer.balance$clientIdSuffix",
             valueDeserializerClass = JsonDeserializer::class.java,
             valueClass = BalanceEventDto::class.java,
             consumerGroup = consumerGroup,
@@ -38,9 +44,12 @@ class SolanaEventsConsumerFactory(
             bootstrapServers = brokerReplicaSet
         )
 
-    fun createCollectionEventConsumer(consumerGroup: String): RaribleKafkaConsumer<CollectionEventDto> =
+    fun createCollectionEventConsumer(
+        consumerGroup: String,
+        clientIdSuffix: String = ""
+    ): RaribleKafkaConsumer<CollectionEventDto> =
         RaribleKafkaConsumer(
-            clientId = "$clientIdPrefix.solana.consumer.collection",
+            clientId = "$clientIdPrefix.solana.consumer.collection$clientIdSuffix",
             valueDeserializerClass = JsonDeserializer::class.java,
             valueClass = CollectionEventDto::class.java,
             consumerGroup = consumerGroup,
@@ -48,9 +57,12 @@ class SolanaEventsConsumerFactory(
             bootstrapServers = brokerReplicaSet
         )
 
-    fun createOrderEventConsumer(consumerGroup: String): RaribleKafkaConsumer<OrderEventDto> =
+    fun createOrderEventConsumer(
+        consumerGroup: String,
+        clientIdSuffix: String = ""
+    ): RaribleKafkaConsumer<OrderEventDto> =
         RaribleKafkaConsumer(
-            clientId = "$clientIdPrefix.solana.consumer.order",
+            clientId = "$clientIdPrefix.solana.consumer.order$clientIdSuffix",
             valueDeserializerClass = JsonDeserializer::class.java,
             valueClass = OrderEventDto::class.java,
             consumerGroup = consumerGroup,
@@ -58,9 +70,12 @@ class SolanaEventsConsumerFactory(
             bootstrapServers = brokerReplicaSet
         )
 
-    fun createActivityEventConsumer(consumerGroup: String): RaribleKafkaConsumer<ActivityDto> =
+    fun createActivityEventConsumer(
+        consumerGroup: String,
+        clientIdSuffix: String = ""
+    ): RaribleKafkaConsumer<ActivityDto> =
         RaribleKafkaConsumer(
-            clientId = "$clientIdPrefix.solana.consumer.activity",
+            clientId = "$clientIdPrefix.solana.consumer.activity$clientIdSuffix",
             valueDeserializerClass = JsonDeserializer::class.java,
             valueClass = ActivityDto::class.java,
             consumerGroup = consumerGroup,

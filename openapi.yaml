@@ -2010,6 +2010,7 @@ components:
       required:
         - eventId
         - account
+        - mint
       properties:
         eventId:
           type: string

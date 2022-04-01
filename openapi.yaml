@@ -1833,6 +1833,7 @@ components:
         - type
         - buyer
         - seller
+        - blockchainInfo
 
     OrderListActivity:
       type: object

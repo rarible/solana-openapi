@@ -10,19 +10,19 @@ class SolanaEventTopicProvider {
         const val VERSION = "v1"
 
         fun getTokenTopic(environment: String): String =
-            "solana.protocol.$environment.token"
+            "protocol.$environment.solana.token"
 
         fun getBalanceTopic(environment: String): String =
-            "solana.protocol.$environment.balance"
+            "protocol.$environment.solana.balance"
 
         fun getCollectionTopic(environment: String): String =
-            "solana.protocol.$environment.collection"
+            "protocol.$environment.solana.collection"
 
         fun getOrderTopic(environment: String): String =
-            "solana.protocol.$environment.order"
+            "protocol.$environment.solana.order"
 
         fun getActivityTopic(environment: String): String =
-            "solana.protocol.$environment.activity"
+            "protocol.$environment.solana.activity"
 
     }
 }

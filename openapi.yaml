@@ -1795,8 +1795,7 @@ components:
         - "@type"
         - from
         - owner
-        - contract
-        - tokenId
+        - tokenAddress
         - value
         - purchase
         - transactionHash

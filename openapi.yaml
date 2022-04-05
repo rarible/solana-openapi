@@ -1430,6 +1430,7 @@ components:
         - ACTIVE
         - FILLED
         - CANCELLED
+        - INACTIVE
 
     Asset:
       type: object

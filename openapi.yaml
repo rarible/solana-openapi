@@ -1336,6 +1336,8 @@ components:
           $ref: "#/components/schemas/Asset"
         takePrice:
           $ref: "#/components/schemas/BigDecimal"
+        makeStock:
+          $ref: "#/components/schemas/BigDecimal"
         fill:
           $ref: "#/components/schemas/BigDecimal"
         start:

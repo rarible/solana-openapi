@@ -8,6 +8,7 @@ import com.rarible.protocol.solana.dto.CollectionEventDto
 import com.rarible.protocol.solana.dto.OrderEventDto
 import com.rarible.protocol.solana.dto.SolanaEventTopicProvider
 import com.rarible.protocol.solana.dto.TokenEventDto
+import org.apache.kafka.clients.consumer.OffsetResetStrategy
 import java.util.*
 
 class SolanaEventsConsumerFactory(
@@ -27,6 +28,7 @@ class SolanaEventsConsumerFactory(
             valueDeserializerClass = JsonDeserializer::class.java,
             valueClass = TokenEventDto::class.java,
             consumerGroup = consumerGroup,
+            offsetResetStrategy = OffsetResetStrategy.EARLIEST,
             defaultTopic = SolanaEventTopicProvider.getTokenTopic(environment),
             bootstrapServers = brokerReplicaSet
         )
@@ -40,6 +42,7 @@ class SolanaEventsConsumerFactory(
             valueDeserializerClass = JsonDeserializer::class.java,
             valueClass = BalanceEventDto::class.java,
             consumerGroup = consumerGroup,
+            offsetResetStrategy = OffsetResetStrategy.EARLIEST,
             defaultTopic = SolanaEventTopicProvider.getBalanceTopic(environment),
             bootstrapServers = brokerReplicaSet
         )
@@ -53,6 +56,7 @@ class SolanaEventsConsumerFactory(
             valueDeserializerClass = JsonDeserializer::class.java,
             valueClass = CollectionEventDto::class.java,
             consumerGroup = consumerGroup,
+            offsetResetStrategy = OffsetResetStrategy.EARLIEST,
             defaultTopic = SolanaEventTopicProvider.getCollectionTopic(environment),
             bootstrapServers = brokerReplicaSet
         )
@@ -66,6 +70,7 @@ class SolanaEventsConsumerFactory(
             valueDeserializerClass = JsonDeserializer::class.java,
             valueClass = OrderEventDto::class.java,
             consumerGroup = consumerGroup,
+            offsetResetStrategy = OffsetResetStrategy.EARLIEST,
             defaultTopic = SolanaEventTopicProvider.getOrderTopic(environment),
             bootstrapServers = brokerReplicaSet
         )
@@ -79,6 +84,7 @@ class SolanaEventsConsumerFactory(
             valueDeserializerClass = JsonDeserializer::class.java,
             valueClass = ActivityDto::class.java,
             consumerGroup = consumerGroup,
+            offsetResetStrategy = OffsetResetStrategy.EARLIEST,
             defaultTopic = SolanaEventTopicProvider.getActivityTopic(environment),
             bootstrapServers = brokerReplicaSet
         )

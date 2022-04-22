@@ -592,6 +592,33 @@ paths:
         "500":
           $ref: "#/components/responses/ServerError"
 
+  /v0.1/activities/byIds:
+    get:
+      tags:
+        - activity-controller
+      description: "Returns activities by ids"
+      operationId: searchActivitiesByIds
+      parameters:
+        - name: "ids"
+          in: query
+          required: true
+          description: "IDs list"
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Activities"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
   ######################## Order API ########################
 
   "/v0.1/orders/{id}":

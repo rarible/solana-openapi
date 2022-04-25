@@ -2116,15 +2116,28 @@ components:
         tokenAddress:
           type: string
       oneOf:
+        - $ref: "#/components/schemas/TokenMetaTriggerEvent"
         - $ref: "#/components/schemas/TokenMetaUpdateEvent"
 
-    TokenMetaUpdateEvent:
+    TokenMetaTriggerEvent:
       type: object
       properties:
         type:
           type: string
           enum:
+            - TRIGGER
+
+    TokenMetaUpdateEvent:
+      type: object
+      required:
+        - tokenMeta
+      properties:
+        type:
+          type: string
+          enum:
             - UPDATE
+        tokenMeta:
+          $ref: "#/components/schemas/TokenMeta"
 
     #################### Solana - Errors ####################
 

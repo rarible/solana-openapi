@@ -2109,6 +2109,28 @@ components:
         order:
           "$ref": "#/components/schemas/Order"
 
+    TokenMetaEvent:
+      required:
+        - tokenAddress
+        - meta
+      properties:
+        tokenAddress:
+          type: string
+      oneOf:
+        - $ref: "#/components/schemas/TokenMetaUpdateEvent"
+
+    TokenMetaUpdateEvent:
+      type: object
+      required:
+        - meta
+      properties:
+        type:
+          type: string
+          enum:
+            - UPDATE
+        meta:
+          $ref: "#/components/schemas/TokenMeta"
+
     #################### Solana - Errors ####################
 
     SolanaApiErrorEntityNotFound:

@@ -8,6 +8,7 @@ import com.rarible.protocol.solana.dto.CollectionEventDto
 import com.rarible.protocol.solana.dto.OrderEventDto
 import com.rarible.protocol.solana.dto.SolanaEventTopicProvider
 import com.rarible.protocol.solana.dto.TokenEventDto
+import com.rarible.protocol.solana.dto.TokenMetaEventDto
 import org.apache.kafka.clients.consumer.OffsetResetStrategy
 import java.util.*
 
@@ -30,6 +31,20 @@ class SolanaEventsConsumerFactory(
             consumerGroup = consumerGroup,
             offsetResetStrategy = OffsetResetStrategy.EARLIEST,
             defaultTopic = SolanaEventTopicProvider.getTokenTopic(environment),
+            bootstrapServers = brokerReplicaSet
+        )
+
+    fun createTokenMetaEventConsumer(
+        consumerGroup: String,
+        clientIdSuffix: String = ""
+    ): RaribleKafkaConsumer<TokenMetaEventDto> =
+        RaribleKafkaConsumer(
+            clientId = "$clientIdPrefix.solana.consumer.token.meta$clientIdSuffix",
+            valueDeserializerClass = JsonDeserializer::class.java,
+            valueClass = TokenMetaEventDto::class.java,
+            consumerGroup = consumerGroup,
+            offsetResetStrategy = OffsetResetStrategy.EARLIEST,
+            defaultTopic = SolanaEventTopicProvider.getTokenMetaTopic(environment),
             bootstrapServers = brokerReplicaSet
         )
 

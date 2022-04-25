@@ -2112,7 +2112,6 @@ components:
     TokenMetaEvent:
       required:
         - tokenAddress
-        - meta
       properties:
         tokenAddress:
           type: string
@@ -2121,15 +2120,11 @@ components:
 
     TokenMetaUpdateEvent:
       type: object
-      required:
-        - meta
       properties:
         type:
           type: string
           enum:
             - UPDATE
-        meta:
-          $ref: "#/components/schemas/TokenMeta"
 
     #################### Solana - Errors ####################
 

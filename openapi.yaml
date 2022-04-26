@@ -1211,6 +1211,9 @@ components:
         mint:
           type: string
           description: Token mint in base58
+        isAssociatedTokenAccount:
+          type: string
+          description: Whether this token account is the Associated Token Account
         collection:
           type: string
         createdAt:

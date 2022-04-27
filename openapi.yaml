@@ -379,7 +379,8 @@ paths:
     get:
       tags:
         - balance-controller
-      description: "Returns balance by mint/owner pair"
+      deprecated: true
+      description: "Use byOwnerAndMint"
       operationId: getBalanceByMintAndOwner
       parameters:
         - name: "mint"
@@ -399,6 +400,37 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Balance"
+        '404':
+          $ref: "#/components/responses/EntityNotFound"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  /v0.1/balances/byOwnerAndMint:
+    get:
+      tags:
+        - balance-controller
+      description: "Returns balances by mint/owner pair"
+      operationId: getBalancesByMintAndOwner
+      parameters:
+        - name: "mint"
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: "owner"
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Balances"
         '404':
           $ref: "#/components/responses/EntityNotFound"
         "400":

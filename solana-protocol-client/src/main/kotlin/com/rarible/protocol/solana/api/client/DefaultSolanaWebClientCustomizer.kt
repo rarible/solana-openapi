@@ -4,6 +4,7 @@ import io.netty.channel.ChannelOption
 import io.netty.channel.epoll.EpollChannelOption
 import io.netty.handler.timeout.ReadTimeoutHandler
 import io.netty.handler.timeout.WriteTimeoutHandler
+import org.slf4j.LoggerFactory
 import org.springframework.boot.web.reactive.function.client.WebClientCustomizer
 import org.springframework.http.client.reactive.ReactorClientHttpConnector
 import org.springframework.util.unit.DataSize
@@ -14,6 +15,7 @@ import java.time.Duration
 import java.util.concurrent.TimeUnit
 
 class DefaultSolanaWebClientCustomizer : WebClientCustomizer {
+    private val log = LoggerFactory.getLogger(DefaultSolanaWebClientCustomizer::class.java)
 
     override fun customize(webClientBuilder: WebClient.Builder) {
         webClientBuilder.codecs { clientCodecConfigurer ->
@@ -40,6 +42,10 @@ class DefaultSolanaWebClientCustomizer : WebClientCustomizer {
                         connection.addHandlerLast(WriteTimeoutHandler(DEFAULT_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS))
                     }
             }
+            .doOnError(
+                { clientRequest, _ -> log.error("clientRequest.headers(): {}", clientRequest.requestHeaders()) },
+                { clientResponse, _ -> log.error("clientResponse.headers(): {}", clientResponse.responseHeaders()) }
+            )
             .responseTimeout(DEFAULT_TIMEOUT)
             .followRedirect(true)
 

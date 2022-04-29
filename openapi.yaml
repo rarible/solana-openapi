@@ -604,7 +604,7 @@ paths:
           $ref: "#/components/responses/ServerError"
 
   /v0.1/activities/byIds:
-    get:
+    post:
       tags:
         - activity-controller
       description: "Returns activities by ids"

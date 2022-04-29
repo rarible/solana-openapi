@@ -609,15 +609,12 @@ paths:
         - activity-controller
       description: "Returns activities by ids"
       operationId: searchActivitiesByIds
-      parameters:
-        - name: "ids"
-          in: query
-          required: true
-          description: "IDs list"
-          schema:
-            type: array
-            items:
-              type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ActivitiesByIdRequest"
+        required: true
       responses:
         "200":
           description: "OK"
@@ -1732,6 +1729,17 @@ components:
         - AUCTION_FINISHED
         - AUCTION_STARTED
         - AUCTION_ENDED
+
+    ActivitiesByIdRequest:
+      type: object
+      required:
+        - ids
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+            description: "List of activity ids"
 
     Activities:
       type: object

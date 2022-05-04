@@ -31,6 +31,7 @@ class DefaultSolanaWebClientCustomizer : WebClientCustomizer {
 
         val client = HttpClient
             .create(provider)
+            .httpResponseDecoder { spec -> spec.validateHeaders(false) }
             .tcpConfiguration {
                 it.option(ChannelOption.SO_KEEPALIVE, true)
                     .option(EpollChannelOption.TCP_KEEPIDLE, 300)
@@ -46,6 +47,8 @@ class DefaultSolanaWebClientCustomizer : WebClientCustomizer {
                 { clientRequest, _ -> log.error("clientRequest.headers(): {}", clientRequest.requestHeaders()) },
                 { clientResponse, _ -> log.error("clientResponse.headers(): {}", clientResponse.responseHeaders()) }
             )
+            .doOnRequest { clientRequest, _ -> log.info("clientRequest.headers(): {}", clientRequest.requestHeaders()) }
+            .doOnResponse { clientResponse, _ -> log.info("clientResponse.headers(): {}", clientResponse.responseHeaders()) }
             .responseTimeout(DEFAULT_TIMEOUT)
             .followRedirect(true)
 

@@ -1364,6 +1364,10 @@ components:
         - updatedAt
         - hash
       properties:
+        auctionHouseFee:
+          type: integer
+        auctionHouseRequiresSignOff:
+          type: boolean
         maker:
           type: string
         make:

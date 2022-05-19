@@ -603,6 +603,44 @@ paths:
         "500":
           $ref: "#/components/responses/ServerError"
 
+  /v0.1/activities/sync:
+    get:
+      tags:
+        - activity-controller
+      description: "Returns activities by specified filter"
+      operationId: getActivitiesSync
+      parameters:
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            type: integer
+            format: int32
+        - name: "sort"
+          in: query
+          required: false
+          description: "Sorting activity time"
+          schema:
+            "$ref": "#/components/schemas/SyncSort"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Activities"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
   /v0.1/activities/byIds:
     post:
       tags:
@@ -1806,6 +1844,9 @@ components:
         id:
           type: string
         date:
+          type: string
+          format: "date-time"
+        dbUpdatedAt:
           type: string
           format: "date-time"
         reverted:

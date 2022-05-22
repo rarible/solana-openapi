@@ -27,7 +27,7 @@ class SolanaApiClientAutoConfiguration(
 
     @Bean
     @ConditionalOnMissingBean(SolanaApiServiceUriProvider::class)
-    fun unionApiServiceUriProvider(
+    fun solanaApiServiceUriProvider(
         @Value("\${rarible.core.client.k8s:false}") k8s: Boolean
     ): SolanaApiServiceUriProvider = if (k8s) {
         K8SSolanaApiServiceUriProvider()
@@ -37,7 +37,7 @@ class SolanaApiClientAutoConfiguration(
 
     @Bean
     @ConditionalOnMissingBean(SolanaNftIndexerApiClientFactory::class)
-    fun unionApiClientFactory(solanaApiServiceUriProvider: SolanaApiServiceUriProvider): SolanaNftIndexerApiClientFactory {
+    fun solanaApiClientFactory(solanaApiServiceUriProvider: SolanaApiServiceUriProvider): SolanaNftIndexerApiClientFactory {
         val customizer = CompositeWebClientCustomizer(
             listOf(DefaultSolanaWebClientCustomizer(), webClientCustomizer)
         )

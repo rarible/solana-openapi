@@ -557,6 +557,30 @@ paths:
         "500":
           $ref: "#/components/responses/ServerError"
 
+  /v0.1/collections/byIds:
+    post:
+      tags:
+        - collection-controller
+      description: "Returns collections by ids"
+      operationId: searchCollectionsByIds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CollectionsByIdRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Collections"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
   ######################## Activity API ########################
 
   /v0.1/activities/search:
@@ -1425,6 +1449,17 @@ components:
       required:
         - name
         - content
+
+    CollectionsByIdRequest:
+      type: object
+      required:
+        - ids
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+            description: "List of collection ids"
 
     #################### Solana - Order Model ####################
     Order:

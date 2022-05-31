@@ -634,6 +634,12 @@ paths:
       description: "Returns activities by specified filter"
       operationId: getActivitiesSync
       parameters:
+        - name: "type"
+          in: query
+          required: false
+          description: "Filtering by activity type"
+          schema:
+            "$ref": "#/components/schemas/SyncType"
         - name: "continuation"
           in: query
           required: false
@@ -650,7 +656,7 @@ paths:
         - name: "sort"
           in: query
           required: false
-          description: "Sorting activity time"
+          description: "Sorting by activity data base update"
           schema:
             "$ref": "#/components/schemas/SyncSort"
       responses:
@@ -2370,6 +2376,14 @@ components:
       enum:
         - DB_UPDATE_ASC
         - DB_UPDATE_DESC
+
+    SyncType:
+      type: string
+      enum:
+        - ORDER
+        - NFT
+        - AUCTION
+
 
   #======================== Responses ============================#
 

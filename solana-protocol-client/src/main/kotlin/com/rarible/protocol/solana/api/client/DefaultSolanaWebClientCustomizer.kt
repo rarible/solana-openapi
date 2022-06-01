@@ -15,7 +15,6 @@ import java.time.Duration
 import java.util.concurrent.TimeUnit
 
 class DefaultSolanaWebClientCustomizer : WebClientCustomizer {
-    private val log = LoggerFactory.getLogger(DefaultSolanaWebClientCustomizer::class.java)
 
     override fun customize(webClientBuilder: WebClient.Builder) {
         webClientBuilder.codecs { clientCodecConfigurer ->
@@ -31,7 +30,6 @@ class DefaultSolanaWebClientCustomizer : WebClientCustomizer {
 
         val client = HttpClient
             .create(provider)
-            .httpResponseDecoder { spec -> spec.validateHeaders(false) }
             .tcpConfiguration {
                 it.option(ChannelOption.SO_KEEPALIVE, true)
                     .option(EpollChannelOption.TCP_KEEPIDLE, 300)
@@ -43,12 +41,6 @@ class DefaultSolanaWebClientCustomizer : WebClientCustomizer {
                         connection.addHandlerLast(WriteTimeoutHandler(DEFAULT_TIMEOUT_MILLIS, TimeUnit.MILLISECONDS))
                     }
             }
-            .doOnError(
-                { clientRequest, _ -> log.error("clientRequest.headers(): {}", clientRequest.requestHeaders()) },
-                { clientResponse, _ -> log.error("clientResponse.headers(): {}", clientResponse.responseHeaders()) }
-            )
-            .doOnRequest { clientRequest, _ -> log.info("clientRequest.headers(): {}", clientRequest.requestHeaders()) }
-            .doOnResponse { clientResponse, _ -> log.info("clientResponse.headers(): {}", clientResponse.responseHeaders()) }
             .responseTimeout(DEFAULT_TIMEOUT)
             .followRedirect(true)
 

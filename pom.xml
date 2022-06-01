@@ -34,7 +34,7 @@
     </distributionManagement>
 
     <properties>
-        <revision>0.1.39</revision>
+        <revision>0.1.40</revision>
 
         <openapi.plugin.version>5.1.0</openapi.plugin.version>
         <rarible.codegen.server.version>1.2.0</rarible.codegen.server.version>

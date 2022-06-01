@@ -86,20 +86,17 @@ paths:
           $ref: "#/components/responses/ServerError"
 
   /v0.1/tokens/byIds:
-    get:
+    post:
       tags:
         - token-controller
       description: Returns the tokens by addresses
       operationId: getTokensByAddresses
-      parameters:
-        - name: tokenAddresses
-          in: query
-          description: "Addresses of the tokens"
-          required: true
-          schema:
-            type: array
-            items:
-              type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TokenIds"
+        required: true
       responses:
         '200':
           description: "OK"
@@ -1324,6 +1321,17 @@ components:
           type: string
         share:
           type: integer
+
+    TokenIds:
+      type: object
+      required:
+        - ids
+      properties:
+        ids:
+          type: array
+          description: "List of the token ids"
+          items:
+            type: string
 
     #################### Solana - Balance Model ####################
     Balance:

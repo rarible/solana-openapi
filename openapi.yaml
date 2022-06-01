@@ -1998,6 +1998,8 @@ components:
           type: string
         sellerOrderHash:
           type: string
+        auctionHouse:
+          type: string
         price:
           $ref: "#/components/schemas/BigDecimal"
         blockchainInfo:
@@ -2033,6 +2035,8 @@ components:
           $ref: "#/components/schemas/Asset"
         price:
           $ref: "#/components/schemas/BigDecimal"
+        auctionHouse:
+          type: string
         blockchainInfo:
           $ref: "#/components/schemas/ActivityBlockchainInfo"
       required:
@@ -2059,6 +2063,8 @@ components:
           $ref: "#/components/schemas/AssetType"
         take:
           $ref: "#/components/schemas/AssetType"
+        auctionHouse:
+          type: string
         blockchainInfo:
           $ref: "#/components/schemas/ActivityBlockchainInfo"
       required:
@@ -2086,6 +2092,8 @@ components:
           $ref: "#/components/schemas/Asset"
         price:
           $ref: "#/components/schemas/BigDecimal"
+        auctionHouse:
+          type: string
         blockchainInfo:
           $ref: "#/components/schemas/ActivityBlockchainInfo"
       required:
@@ -2112,6 +2120,8 @@ components:
           $ref: "#/components/schemas/AssetType"
         take:
           $ref: "#/components/schemas/AssetType"
+        auctionHouse:
+          type: string
         blockchainInfo:
           $ref: "#/components/schemas/ActivityBlockchainInfo"
       required:

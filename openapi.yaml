@@ -372,6 +372,43 @@ paths:
         "500":
           $ref: "#/components/responses/ServerError"
 
+  /v0.1/balances/all:
+    get:
+      tags:
+        - balance-controller
+      description: "Returns all balances"
+      operationId: getBalancesAll
+      parameters:
+        - name: "continuation"
+          in: query
+          required: false
+          description: "Continuation token from the previous response"
+          schema:
+            type: string
+        - name: "size"
+          in: query
+          required: false
+          description: "The number of items to return"
+          schema:
+            type: integer
+        - name: "showDeleted"
+          in: query
+          required: false
+          description: "Include deleted items"
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Balances"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
   /v0.1/balances/byMintAndOwner:
     get:
       tags:

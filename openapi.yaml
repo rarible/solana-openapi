@@ -991,7 +991,10 @@ paths:
           required: true
           description: "The maker of the order"
           schema:
-            type: string
+            type: array
+            minItems: 1
+            items:
+              type: string
         - name: "origin"
           in: query
           required: false
@@ -1133,7 +1136,10 @@ paths:
           required: true
           description: "The maker of the order"
           schema:
-            type: string
+            type: array
+            minItems: 1
+            items:
+              type: string
         - name: "origin"
           in: query
           required: false

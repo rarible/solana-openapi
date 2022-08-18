@@ -1272,6 +1272,16 @@ components:
         description:
           type: string
           description: "Description of the token"
+        tags:
+          type: array
+          default: [ ]
+          items:
+            type: string
+        genres:
+          type: array
+          default: [ ]
+          items:
+            type: string
         creators:
           type: array
           description: Creators of the token, may be empty, but if present, the 'share' sums up to 100
@@ -1287,10 +1297,23 @@ components:
           description: "Token content information"
           items:
             $ref: "#/components/schemas/TokenMetaContent"
+        language:
+          type: string
+        rights:
+          type: string
+        rightsUri:
+          type: string
+        externalUri:
+          type: string
+          description: "External link to the original website for the collection"
+        originalMetaUri:
+          type: string
       required:
         - name
         - attributes
         - content
+        - tags
+        - genres
 
     TokenMetaAttribute:
       required:
@@ -1309,6 +1332,8 @@ components:
     TokenMetaContent:
       type: object
       properties:
+        fileName:
+          type: string
         url:
           type: string
         representation:
@@ -1329,6 +1354,10 @@ components:
       oneOf:
         - $ref: "#/components/schemas/ImageContent"
         - $ref: "#/components/schemas/VideoContent"
+        - $ref: "#/components/schemas/AudioContent"
+        - $ref: "#/components/schemas/Model3dContent"
+        - $ref: "#/components/schemas/HtmlContent"
+        - $ref: "#/components/schemas/UnknownContent"
 
     ImageContent:
       type: object
@@ -1353,6 +1382,38 @@ components:
           type: integer
         height:
           type: integer
+
+    AudioContent:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - AUDIO
+
+    Model3dContent:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - MODEL_3D
+
+    HtmlContent:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - HTML
+
+    UnknownContent:
+      type: object
+      properties:
+        "@type":
+          type: string
+          enum:
+            - UNKNOWN
 
     TokenCreatorPart:
       required:

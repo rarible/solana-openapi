@@ -132,7 +132,7 @@ paths:
         "400":
           $ref: "#/components/responses/BadRequest"
         "500":
-          $ref: "#/components/responses/ServerError"
+          $ref: "#/components/responses/MetaError"
 
   /v0.1/tokens/byCollection:
     get:
@@ -2465,6 +2465,24 @@ components:
           type: string
           description: "Error message"
 
+    SolanaApiMetaError:
+      required:
+        - code
+        - message
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+            - UNPARSEABLE_LINK
+            - UNPARSEABLE_JSON
+            - TIMEOUT
+            - ERROR
+          default: ERROR
+        message:
+          type: string
+          description: "Error message"
+
     #################### Referenced Types ####################
 
     BigInteger:
@@ -2521,6 +2539,12 @@ components:
         application/json:
           schema:
             "$ref": "#/components/schemas/SolanaApiErrorServerError"
+    MetaError:
+      description: Meta Error
+      content:
+        application/json:
+          schema:
+            "$ref": "#/components/schemas/SolanaApiMetaError"
     EntityNotFound:
       description: Not Found
       content:

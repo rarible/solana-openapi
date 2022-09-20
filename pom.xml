@@ -34,7 +34,7 @@
     </distributionManagement>
 
     <properties>
-        <revision>0.1.49</revision>
+        <revision>0.1.50</revision>
 
         <openapi.plugin.version>5.1.0</openapi.plugin.version>
         <rarible.codegen.server.version>1.2.2</rarible.codegen.server.version>
@@ -43,7 +43,7 @@
 
         <codegen.package>com.rarible.protocol.solana.dto</codegen.package>
 
-        <rarible.core.version>2.4.22</rarible.core.version>
+        <rarible.core.version>2.4.26</rarible.core.version>
     </properties>
 
     <dependencyManagement>

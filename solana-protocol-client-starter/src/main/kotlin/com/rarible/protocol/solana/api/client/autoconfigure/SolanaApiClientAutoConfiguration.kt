@@ -37,10 +37,12 @@ class SolanaApiClientAutoConfiguration(
 
     @Bean
     @ConditionalOnMissingBean(SolanaNftIndexerApiClientFactory::class)
-    fun unionApiClientFactory(solanaApiServiceUriProvider: SolanaApiServiceUriProvider): SolanaNftIndexerApiClientFactory {
-        val customizer = CompositeWebClientCustomizer(
-            listOf(DefaultSolanaWebClientCustomizer(), webClientCustomizer)
-        )
+    fun unionApiClientFactory(
+        solanaApiServiceUriProvider: SolanaApiServiceUriProvider,
+        @Value("\${rarible.core.client.name:}") clientName: String,
+    ): SolanaNftIndexerApiClientFactory {
+        val customizers = listOf(DefaultSolanaWebClientCustomizer(clientName), webClientCustomizer)
+        val customizer = CompositeWebClientCustomizer(customizers)
         return SolanaNftIndexerApiClientFactory(solanaApiServiceUriProvider, customizer)
     }
 }

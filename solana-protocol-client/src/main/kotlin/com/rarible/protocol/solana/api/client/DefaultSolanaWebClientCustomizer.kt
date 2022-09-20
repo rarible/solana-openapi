@@ -4,7 +4,6 @@ import io.netty.channel.ChannelOption
 import io.netty.channel.epoll.EpollChannelOption
 import io.netty.handler.timeout.ReadTimeoutHandler
 import io.netty.handler.timeout.WriteTimeoutHandler
-import org.slf4j.LoggerFactory
 import org.springframework.boot.web.reactive.function.client.WebClientCustomizer
 import org.springframework.http.client.reactive.ReactorClientHttpConnector
 import org.springframework.util.unit.DataSize
@@ -14,7 +13,9 @@ import reactor.netty.resources.ConnectionProvider
 import java.time.Duration
 import java.util.concurrent.TimeUnit
 
-class DefaultSolanaWebClientCustomizer : WebClientCustomizer {
+class DefaultSolanaWebClientCustomizer(
+    private val clientName: String?
+) : WebClientCustomizer {
 
     override fun customize(webClientBuilder: WebClient.Builder) {
         webClientBuilder.codecs { clientCodecConfigurer ->
@@ -47,6 +48,9 @@ class DefaultSolanaWebClientCustomizer : WebClientCustomizer {
         val connector = ReactorClientHttpConnector(client)
 
         webClientBuilder.clientConnector(connector)
+        if (!clientName.isNullOrBlank()) {
+            webClientBuilder.defaultHeader("x-rarible-client", clientName)
+        }
     }
 
     companion object {

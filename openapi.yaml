@@ -441,6 +441,32 @@ paths:
         "500":
           $ref: "#/components/responses/ServerError"
 
+  /v0.1/balances/byMintAndOwnerBatch:
+    post:
+      tags:
+        - balance-controller
+      description: "Returns balances by list of mint/owner pairs"
+      operationId: getBalanceByMintAndOwnerBatch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BalanceIds"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Balances"
+        '404':
+          $ref: "#/components/responses/EntityNotFound"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
   /v0.1/balances/byOwnerAndMint:
     get:
       tags:
@@ -1441,6 +1467,17 @@ components:
             type: string
 
     #################### Solana - Balance Model ####################
+    BalanceIds:
+      type: object
+      required:
+        - ids
+      properties:
+        ids:
+          type: array
+          description: "List of the balance ids"
+          items:
+            type: string
+
     Balance:
       required:
         - account

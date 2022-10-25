@@ -7,6 +7,7 @@ import com.rarible.protocol.solana.api.client.K8SSolanaApiServiceUriProvider
 import com.rarible.protocol.solana.api.client.NoopWebClientCustomizer
 import com.rarible.protocol.solana.api.client.SolanaApiServiceUriProvider
 import com.rarible.protocol.solana.api.client.SolanaNftIndexerApiClientFactory
+import com.rarible.protocol.solana.api.client.SwarmSolanaApiServiceUriProvider
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
@@ -26,8 +27,12 @@ class SolanaApiClientAutoConfiguration(
 
     @Bean
     @ConditionalOnMissingBean(SolanaApiServiceUriProvider::class)
-    fun unionApiServiceUriProvider(): SolanaApiServiceUriProvider {
-        return K8SSolanaApiServiceUriProvider()
+    fun unionApiServiceUriProvider(
+        @Value("\${rarible.core.client.k8s:false}") k8s: Boolean
+    ): SolanaApiServiceUriProvider = if (k8s) {
+        K8SSolanaApiServiceUriProvider()
+    } else {
+        SwarmSolanaApiServiceUriProvider(applicationEnvironmentInfo.name)
     }
 
     @Bean

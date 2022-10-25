@@ -46,7 +46,7 @@ class SolanaApiClientAutoConfigurationIt {
     @Test
     fun `test default client uri`() {
         val uri = solanaApiServiceUriProvider.getUri()
-        assertThat(uri.toString()).isEqualTo("http://solana-api:8080")
+        assertThat(uri.toString()).isEqualTo("http://test-solana-api:8080")
     }
 
     @TestConfiguration

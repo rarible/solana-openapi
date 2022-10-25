@@ -22,7 +22,7 @@ class DefaultSolanaWebClientCustomizer(
             clientCodecConfigurer.defaultCodecs().maxInMemorySize(DEFAULT_MAX_BODY_SIZE)
         }
         val provider = ConnectionProvider.builder("solana-protocol-default-connection-provider")
-            .maxConnections(500)
+            .maxConnections(200)
             .pendingAcquireMaxCount(-1)
             .maxIdleTime(DEFAULT_TIMEOUT)
             .maxLifeTime(DEFAULT_TIMEOUT)

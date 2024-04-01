@@ -43,7 +43,7 @@
 
         <codegen.package>com.rarible.protocol.solana.dto</codegen.package>
 
-        <rarible.core.version>2.6.18</rarible.core.version>
+        <rarible.core.version>2.7.2</rarible.core.version>
     </properties>
 
     <dependencyManagement>

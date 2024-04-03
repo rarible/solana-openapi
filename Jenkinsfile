@@ -1,3 +1,3 @@
 @Library('shared-library') _
 
-pipelinePackageRelease(['nexusCredentialsId': 'nexus-ext-ci'])
+pipelinePackageRelease(["credentialsId": "nexus-ext-ci", "pkgRepoName":"nexus-ext"])

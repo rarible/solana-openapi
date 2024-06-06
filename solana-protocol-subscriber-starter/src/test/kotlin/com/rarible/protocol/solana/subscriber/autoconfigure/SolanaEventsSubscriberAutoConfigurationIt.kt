@@ -14,7 +14,8 @@ import org.springframework.context.annotation.Import
 
 @SpringBootTest(
     properties = [
-        "solana.protocol.subscriber.broker-replica-set=PLAINTEXT://localhost:9092"
+        "solana.protocol.subscriber.brokerReplicaSet=PLAINTEXT://localhost:9092",
+        "solana.protocol.subscriber.blockchain=solana"
     ]
 )
 @SpringBootConfiguration

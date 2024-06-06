@@ -9,23 +9,23 @@ class SolanaEventTopicProvider {
          */
         const val VERSION = "v1"
 
-        fun getTokenTopic(environment: String): String =
-            "protocol.$environment.solana.token"
+        fun getTokenTopic(environment: String, blockchain: String): String =
+            "protocol.$environment.$blockchain.token"
 
-        fun getTokenMetaTopic(environment: String): String =
-            "protocol.$environment.solana.token.meta"
+        fun getTokenMetaTopic(environment: String, blockchain: String): String =
+            "protocol.$environment.$blockchain.token.meta"
 
-        fun getBalanceTopic(environment: String): String =
-            "protocol.$environment.solana.balance"
+        fun getBalanceTopic(environment: String, blockchain: String): String =
+            "protocol.$environment.$blockchain.balance"
 
-        fun getCollectionTopic(environment: String): String =
-            "protocol.$environment.solana.collection"
+        fun getCollectionTopic(environment: String, blockchain: String): String =
+            "protocol.$environment.$blockchain.collection"
 
-        fun getOrderTopic(environment: String): String =
-            "protocol.$environment.solana.order"
+        fun getOrderTopic(environment: String, blockchain: String): String =
+            "protocol.$environment.$blockchain.order"
 
-        fun getActivityTopic(environment: String): String =
-            "protocol.$environment.solana.activity"
+        fun getActivityTopic(environment: String, blockchain: String): String =
+            "protocol.$environment.$blockchain.activity"
 
     }
 }

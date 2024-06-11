@@ -10,12 +10,13 @@ import com.rarible.protocol.solana.dto.SolanaEventTopicProvider
 import com.rarible.protocol.solana.dto.TokenEventDto
 import com.rarible.protocol.solana.dto.TokenMetaEventDto
 import org.apache.kafka.clients.consumer.OffsetResetStrategy
-import java.util.*
+import java.util.UUID
 
 class SolanaEventsConsumerFactory(
     private val brokerReplicaSet: String,
     host: String,
-    private val environment: String
+    private val environment: String,
+    private val blockchain: String,
 ) {
 
     private val clientIdPrefix = "$environment.$host.${UUID.randomUUID()}"
@@ -25,12 +26,12 @@ class SolanaEventsConsumerFactory(
         clientIdSuffix: String = ""
     ): RaribleKafkaConsumer<TokenEventDto> =
         RaribleKafkaConsumer(
-            clientId = "$clientIdPrefix.solana.consumer.token$clientIdSuffix",
+            clientId = "$clientIdPrefix.$blockchain.consumer.token$clientIdSuffix",
             valueDeserializerClass = JsonDeserializer::class.java,
             valueClass = TokenEventDto::class.java,
             consumerGroup = consumerGroup,
             offsetResetStrategy = OffsetResetStrategy.EARLIEST,
-            defaultTopic = SolanaEventTopicProvider.getTokenTopic(environment),
+            defaultTopic = SolanaEventTopicProvider.getTokenTopic(environment, blockchain),
             bootstrapServers = brokerReplicaSet
         )
 
@@ -39,12 +40,12 @@ class SolanaEventsConsumerFactory(
         clientIdSuffix: String = ""
     ): RaribleKafkaConsumer<TokenMetaEventDto> =
         RaribleKafkaConsumer(
-            clientId = "$clientIdPrefix.solana.consumer.token.meta$clientIdSuffix",
+            clientId = "$clientIdPrefix.$blockchain.consumer.token.meta$clientIdSuffix",
             valueDeserializerClass = JsonDeserializer::class.java,
             valueClass = TokenMetaEventDto::class.java,
             consumerGroup = consumerGroup,
             offsetResetStrategy = OffsetResetStrategy.EARLIEST,
-            defaultTopic = SolanaEventTopicProvider.getTokenMetaTopic(environment),
+            defaultTopic = SolanaEventTopicProvider.getTokenMetaTopic(environment, blockchain),
             bootstrapServers = brokerReplicaSet
         )
 
@@ -53,12 +54,12 @@ class SolanaEventsConsumerFactory(
         clientIdSuffix: String = ""
     ): RaribleKafkaConsumer<BalanceEventDto> =
         RaribleKafkaConsumer(
-            clientId = "$clientIdPrefix.solana.consumer.balance$clientIdSuffix",
+            clientId = "$clientIdPrefix.$blockchain.consumer.balance$clientIdSuffix",
             valueDeserializerClass = JsonDeserializer::class.java,
             valueClass = BalanceEventDto::class.java,
             consumerGroup = consumerGroup,
             offsetResetStrategy = OffsetResetStrategy.EARLIEST,
-            defaultTopic = SolanaEventTopicProvider.getBalanceTopic(environment),
+            defaultTopic = SolanaEventTopicProvider.getBalanceTopic(environment, blockchain),
             bootstrapServers = brokerReplicaSet
         )
 
@@ -67,12 +68,12 @@ class SolanaEventsConsumerFactory(
         clientIdSuffix: String = ""
     ): RaribleKafkaConsumer<CollectionEventDto> =
         RaribleKafkaConsumer(
-            clientId = "$clientIdPrefix.solana.consumer.collection$clientIdSuffix",
+            clientId = "$clientIdPrefix.$blockchain.consumer.collection$clientIdSuffix",
             valueDeserializerClass = JsonDeserializer::class.java,
             valueClass = CollectionEventDto::class.java,
             consumerGroup = consumerGroup,
             offsetResetStrategy = OffsetResetStrategy.EARLIEST,
-            defaultTopic = SolanaEventTopicProvider.getCollectionTopic(environment),
+            defaultTopic = SolanaEventTopicProvider.getCollectionTopic(environment, blockchain),
             bootstrapServers = brokerReplicaSet
         )
 
@@ -81,12 +82,12 @@ class SolanaEventsConsumerFactory(
         clientIdSuffix: String = ""
     ): RaribleKafkaConsumer<OrderEventDto> =
         RaribleKafkaConsumer(
-            clientId = "$clientIdPrefix.solana.consumer.order$clientIdSuffix",
+            clientId = "$clientIdPrefix.$blockchain.consumer.order$clientIdSuffix",
             valueDeserializerClass = JsonDeserializer::class.java,
             valueClass = OrderEventDto::class.java,
             consumerGroup = consumerGroup,
             offsetResetStrategy = OffsetResetStrategy.EARLIEST,
-            defaultTopic = SolanaEventTopicProvider.getOrderTopic(environment),
+            defaultTopic = SolanaEventTopicProvider.getOrderTopic(environment, blockchain),
             bootstrapServers = brokerReplicaSet
         )
 
@@ -95,12 +96,12 @@ class SolanaEventsConsumerFactory(
         clientIdSuffix: String = ""
     ): RaribleKafkaConsumer<ActivityDto> =
         RaribleKafkaConsumer(
-            clientId = "$clientIdPrefix.solana.consumer.activity$clientIdSuffix",
+            clientId = "$clientIdPrefix.$blockchain.consumer.activity$clientIdSuffix",
             valueDeserializerClass = JsonDeserializer::class.java,
             valueClass = ActivityDto::class.java,
             consumerGroup = consumerGroup,
             offsetResetStrategy = OffsetResetStrategy.EARLIEST,
-            defaultTopic = SolanaEventTopicProvider.getActivityTopic(environment),
+            defaultTopic = SolanaEventTopicProvider.getActivityTopic(environment, blockchain),
             bootstrapServers = brokerReplicaSet
         )
 }

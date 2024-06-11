@@ -6,5 +6,6 @@ import org.springframework.boot.context.properties.ConstructorBinding
 @ConfigurationProperties("solana.protocol.subscriber")
 @ConstructorBinding
 data class SolanaEventsSubscriberProperties(
-    val brokerReplicaSet: String
+    val brokerReplicaSet: String,
+    val blockchain: String,
 )

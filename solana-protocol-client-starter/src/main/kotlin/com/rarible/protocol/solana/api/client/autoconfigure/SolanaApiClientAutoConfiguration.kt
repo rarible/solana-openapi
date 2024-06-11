@@ -28,9 +28,10 @@ class SolanaApiClientAutoConfiguration(
     @Bean
     @ConditionalOnMissingBean(SolanaApiServiceUriProvider::class)
     fun unionApiServiceUriProvider(
-        @Value("\${rarible.core.client.k8s:true}") k8s: Boolean
+        @Value("\${rarible.core.client.k8s:true}") k8s: Boolean,
+        @Value("\${common.blockchain}") blockchain: String,
     ): SolanaApiServiceUriProvider = if (k8s) {
-        K8SSolanaApiServiceUriProvider()
+        K8SSolanaApiServiceUriProvider(blockchain)
     } else {
         SwarmSolanaApiServiceUriProvider(applicationEnvironmentInfo.name)
     }

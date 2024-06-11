@@ -18,7 +18,8 @@ class SolanaEventsSubscriberAutoConfiguration(
         return SolanaEventsConsumerFactory(
             brokerReplicaSet = properties.brokerReplicaSet,
             host = applicationEnvironmentInfo.host,
-            environment = applicationEnvironmentInfo.name
+            environment = applicationEnvironmentInfo.name,
+            blockchain = properties.blockchain,
         )
     }
 }
